@@ -702,6 +702,11 @@
         <button class="tab-btn active" onclick="switchTab('ai-tab',this)">🤖 AI COMPUTE</button>
         <button class="tab-btn" onclick="switchTab('finans-tab',this)">📈 FINANS & MARKETS</button>
         <button class="tab-btn" onclick="switchTab('security-tab',this)">🛡️ CYBER SECURITY</button>
+        <button class="tab-btn" onclick="switchTab('crypto-tab',this)">₿ CRYPTO TRADING</button>
+        <button class="tab-btn" onclick="switchTab('ml-tab',this)">🧠 AI TRAINING</button>
+        <button class="tab-btn" onclick="switchTab('network-tab',this)">🌐 NETWORK INTEL</button>
+        <button class="tab-btn" onclick="switchTab('blockchain-tab',this)">⛓️ BLOCKCHAIN</button>
+        <button class="tab-btn" onclick="switchTab('quantum-tab',this)">⚛️ QUANTUM</button>
         <button class="tab-btn" onclick="switchTab('weather-tab',this)">🌤️ WEATHER & CLIMATE</button>
         <button class="tab-btn" onclick="switchTab('news-tab',this)">📰 TECH NEWS</button>
         <button class="tab-btn" onclick="switchTab('system-tab',this)">⚙️ SYSTEM MONITOR</button>
@@ -1023,6 +1028,205 @@
                     <div class="metric-box"><h3>Day Length</h3><div class="metric-val" id="weather-daylength" style="font-size:1rem">--h</div></div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- ══════════════ CRYPTO TRADING ══════════════ -->
+    <div id="crypto-tab" class="tab-content">
+        <div class="grid-4">
+            <div class="metric-box hacker-glow" style="border:2px solid #0f0;background:#000"><h3 style="color:#0f0;text-shadow:0 0 10px #0f0">PORTFOLIO VALUE</h3><div class="metric-val" id="crypto-portfolio" style="color:#0f0;text-shadow:0 0 20px #0f0;font-family:'Courier New',monospace">$0</div></div>
+            <div class="metric-box hacker-glow" style="border:2px solid #0f0;background:#000"><h3 style="color:#0f0;text-shadow:0 0 10px #0f0">24H P&L</h3><div class="metric-val" id="crypto-pnl" style="color:#0f0;text-shadow:0 0 20px #0f0;font-family:'Courier New',monospace">$0</div></div>
+            <div class="metric-box hacker-glow" style="border:2px solid #0f0;background:#000"><h3 style="color:#0f0;text-shadow:0 0 10px #0f0">OPEN POSITIONS</h3><div class="metric-val" id="crypto-positions" style="color:#0f0;text-shadow:0 0 20px #0f0;font-family:'Courier New',monospace">0</div></div>
+            <div class="metric-box hacker-glow" style="border:2px solid #0f0;background:#000"><h3 style="color:#0f0;text-shadow:0 0 10px #0f0">WIN RATE</h3><div class="metric-val" id="crypto-winrate" style="color:#0f0;text-shadow:0 0 20px #0f0;font-family:'Courier New',monospace">0%</div></div>
+        </div>
+
+        <div class="grid-asymmetric">
+            <div class="card hacker-terminal">
+                <h2 style="color:#0f0;text-shadow:0 0 10px #0f0;margin-bottom:15px">>>> CANDLESTICK CHART</h2>
+                <div class="chart-wrap" style="height:300px"><canvas id="cryptoCandlestickChart"></canvas></div>
+            </div>
+            <div class="card hacker-terminal">
+                <h2 style="color:#0f0;text-shadow:0 0 10px #0f0;margin-bottom:15px">>>> ASSET FOCUS [PRICE HISTORY]</h2>
+                <div class="chart-wrap" style="height:145px;margin-bottom:14px"><canvas id="cryptoVisionChart"></canvas></div>
+                <h2 style="color:#0f0;text-shadow:0 0 10px #0f0;margin-bottom:15px">>>> TRADING PANEL</h2>
+                <div style="margin-bottom:12px">
+                    <label style="color:#0f0;font-size:0.7rem">[SELECT_ASSET]:</label>
+                    <select id="crypto-asset" class="fx-select" style="width:100%;margin-top:5px;background:#000;border:1px solid #0f0;color:#0f0">
+                        <option value="BTC">BTC/USDT</option>
+                        <option value="ETH">ETH/USDT</option>
+                        <option value="SOL">SOL/USDT</option>
+                        <option value="XRP">XRP/USDT</option>
+                    </select>
+                </div>
+                <div style="margin-bottom:12px">
+                    <label style="color:#0f0;font-size:0.7rem">[ORDER_TYPE]:</label>
+                    <select id="crypto-order-type" class="fx-select" style="width:100%;margin-top:5px;background:#000;border:1px solid #0f0;color:#0f0">
+                        <option value="market">MARKET</option>
+                        <option value="limit">LIMIT</option>
+                        <option value="stop">STOP-LOSS</option>
+                    </select>
+                </div>
+                <div style="margin-bottom:12px">
+                    <label style="color:#0f0;font-size:0.7rem">[AMOUNT]:</label>
+                    <input type="number" id="crypto-amount" value="0.01" step="0.01" style="width:100%;background:#000;border:1px solid #0f0;color:#0f0;padding:6px;border-radius:3px;margin-top:5px">
+                </div>
+                <div style="display:flex;gap:8px">
+                    <button onclick="CryptoTrading.placeOrder('buy')" style="flex:1;background:#000;border:2px solid #0f0;color:#0f0;padding:10px;border-radius:3px;cursor:pointer;font-family:'Courier New',monospace;font-size:0.7rem;font-weight:700;text-shadow:0 0 5px #0f0">[BUY]</button>
+                    <button onclick="CryptoTrading.placeOrder('sell')" style="flex:1;background:#000;border:2px solid #0f0;color:#0f0;padding:10px;border-radius:3px;cursor:pointer;font-family:'Courier New',monospace;font-size:0.7rem;font-weight:700;text-shadow:0 0 5px #0f0">[SELL]</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-split" style="position:relative;z-index:1">
+            <div class="card hacker-terminal">
+                <h2 style="color:#0f0;text-shadow:0 0 10px #0f0;margin-bottom:15px">>>> LIVE ORDER BOOK</h2>
+                <div class="order-book-container" style="background:#000;border:1px solid #0f0;border-radius:5px;padding:10px;height:250px;overflow-y:auto;font-family:'Courier New',monospace;font-size:0.7rem">
+                    <div style="display:flex;justify-content:space-between;color:#0f0;margin-bottom:5px;padding-bottom:5px;border-bottom:1px solid #0f0"><span>[PRICE]</span><span>[SIZE]</span><span>[TOTAL]</span></div>
+                    <div id="crypto-asks" style="margin-bottom:10px"></div>
+                    <div style="text-align:center;color:#0f0;font-weight:700;padding:5px;border:1px solid #0f0;border-radius:3px;margin:5px 0" id="crypto-spread">SPREAD: 0.00</div>
+                    <div id="crypto-bids"></div>
+                </div>
+            </div>
+            <div class="card hacker-terminal">
+                <h2 style="color:#0f0;text-shadow:0 0 10px #0f0;margin-bottom:15px">>>> TECHNICAL INDICATORS</h2>
+                <div class="chart-wrap" style="height:120px"><canvas id="cryptoRSIChart"></canvas></div>
+                <div class="chart-wrap" style="height:120px;margin-top:10px"><canvas id="cryptoMACDChart"></canvas></div>
+            </div>
+        </div>
+
+        <div class="card hacker-terminal" style="margin-top:18px;position:relative;z-index:1">
+            <h2 style="color:#0f0;text-shadow:0 0 10px #0f0;margin-bottom:15px">>>> ORDER HISTORY</h2>
+            <div id="crypto-order-history" style="max-height:200px;overflow-y:auto;font-family:'Courier New',monospace;font-size:0.7rem;color:#0f0"></div>
+        </div>
+    </div>
+
+    <!-- ══════════════ AI TRAINING ══════════════ -->
+    <div id="ml-tab" class="tab-content">
+        <div class="grid-4">
+            <div class="metric-box"><h3>Training Epoch</h3><div class="metric-val" id="ml-epoch" style="color:var(--accent);text-shadow:0 0 12px var(--ga)">0/1000</div></div>
+            <div class="metric-box"><h3>Training Loss</h3><div class="metric-val" id="ml-loss" style="color:var(--green);text-shadow:0 0 12px var(--gg)">0.000</div></div>
+            <div class="metric-box"><h3>Validation Acc</h3><div class="metric-val" id="ml-acc" style="color:var(--orange);text-shadow:0 0 12px var(--go)">0%</div></div>
+            <div class="metric-box"><h3>GPU Memory</h3><div class="metric-val" id="ml-gpu" style="color:var(--purple);text-shadow:0 0 12px var(--gp)">0 GB</div></div>
+        </div>
+
+        <div class="grid-asymmetric">
+            <div class="card">
+                <h2>Training Progress</h2>
+                <div class="chart-wrap" style="height:280px"><canvas id="mlTrainingChart"></canvas><div class="chart-glow-overlay"></div></div>
+            </div>
+            <div class="card">
+                <h2>Model Architecture</h2>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--muted)">
+                    <div style="margin-bottom:10px">Input Layer: 784 neurons</div>
+                    <div style="margin-bottom:10px">Hidden Layer 1: 512 neurons (ReLU)</div>
+                    <div style="margin-bottom:10px">Hidden Layer 2: 256 neurons (ReLU)</div>
+                    <div style="margin-bottom:10px">Hidden Layer 3: 128 neurons (ReLU)</div>
+                    <div style="margin-bottom:10px">Output Layer: 10 neurons (Softmax)</div>
+                    <div style="margin-top:15px;color:var(--accent)">Total Parameters: 669,706</div>
+                </div>
+                <hr class="sep">
+                <h2>Hyperparameters</h2>
+                <div class="grid-4" style="margin-top:14px">
+                    <div class="metric-box"><h3>Learning Rate</h3><div class="metric-val" style="font-size:1rem">0.001</div></div>
+                    <div class="metric-box"><h3>Batch Size</h3><div class="metric-val" style="font-size:1rem">64</div></div>
+                    <div class="metric-box"><h3>Optimizer</h3><div class="metric-val" style="font-size:1rem">Adam</div></div>
+                    <div class="metric-box"><h3>Dropout</h3><div class="metric-val" style="font-size:1rem">0.5</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top:18px">
+            <h2>GPU Utilization Heatmap</h2>
+            <div id="gpu-heatmap" style="display:grid;grid-template-columns:repeat(16,1fr);gap:2px;height:100px"></div>
+        </div>
+    </div>
+
+    <!-- ══════════════ NETWORK INTEL ══════════════ -->
+    <div id="network-tab" class="tab-content">
+        <div class="grid-4">
+            <div class="metric-box"><h3>Total Bandwidth</h3><div class="metric-val" id="net-bandwidth" style="color:var(--accent);text-shadow:0 0 12px var(--ga)">0 Gbps</div></div>
+            <div class="metric-box"><h3>Active Connections</h3><div class="metric-val" id="net-connections" style="color:var(--green);text-shadow:0 0 12px var(--gg)">0</div></div>
+            <div class="metric-box"><h3>Packets/sec</h3><div class="metric-val" id="net-packets" style="color:var(--orange);text-shadow:0 0 12px var(--go)">0</div></div>
+            <div class="metric-box"><h3>Latency</h3><div class="metric-val" id="net-latency" style="color:var(--purple);text-shadow:0 0 12px var(--gp)">0 ms</div></div>
+        </div>
+
+        <div class="grid-asymmetric">
+            <div class="card">
+                <h2>Network Topology</h2>
+                <canvas id="networkTopologyCanvas" style="width:100%;height:280px;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:5px;display:block"></canvas>
+            </div>
+            <div class="card">
+                <h2>Traffic Analysis</h2>
+                <div class="chart-wrap" style="height:280px"><canvas id="networkTrafficChart"></canvas><div class="chart-glow-overlay"></div></div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top:18px">
+            <h2>Device Discovery</h2>
+            <table>
+                <thead><tr><th>Device</th><th>IP Address</th><th>MAC Address</th><th>Status</th><th>Bandwidth</th></tr></thead>
+                <tbody id="device-table"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ══════════════ BLOCKCHAIN ══════════════ -->
+    <div id="blockchain-tab" class="tab-content">
+        <div class="grid-4">
+            <div class="metric-box"><h3>Latest Block</h3><div class="metric-val" id="block-height" style="color:var(--accent);text-shadow:0 0 12px var(--ga)">0</div></div>
+            <div class="metric-box"><h3>Block Time</h3><div class="metric-val" id="block-time" style="color:var(--green);text-shadow:0 0 12px var(--gg)">0s</div></div>
+            <div class="metric-box"><h3>Transactions</h3><div class="metric-val" id="block-txs" style="color:var(--orange);text-shadow:0 0 12px var(--go)">0</div></div>
+            <div class="metric-box"><h3>Gas Price</h3><div class="metric-val" id="block-gas" style="color:var(--purple);text-shadow:0 0 12px var(--gp)">0 Gwei</div></div>
+        </div>
+
+        <div class="grid-asymmetric">
+            <div class="card">
+                <h2>Recent Transactions</h2>
+                <div id="tx-list" style="max-height:280px;overflow-y:auto;font-family:'JetBrains Mono',monospace;font-size:0.7rem"></div>
+            </div>
+            <div class="card">
+                <h2>Wallet Monitor</h2>
+                <div class="grid-4" style="margin-top:14px">
+                    <div class="metric-box"><h3>Total Balance</h3><div class="metric-val" style="font-size:1rem;color:var(--accent)">0 ETH</div></div>
+                    <div class="metric-box"><h3>Staked</h3><div class="metric-val" style="font-size:1rem;color:var(--green)">0 ETH</div></div>
+                    <div class="metric-box"><h3>Rewards</h3><div class="metric-val" style="font-size:1rem;color:var(--orange)">0 ETH</div></div>
+                    <div class="metric-box"><h3>NFTs</h3><div class="metric-val" style="font-size:1rem;color:var(--purple)">0</div></div>
+                </div>
+                <hr class="sep">
+                <h2>Smart Contract Interactions</h2>
+                <div id="contract-list" style="max-height:150px;overflow-y:auto;font-family:'JetBrains Mono',monospace;font-size:0.7rem"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════ QUANTUM ══════════════ -->
+    <div id="quantum-tab" class="tab-content">
+        <div class="grid-4">
+            <div class="metric-box"><h3>Qubits</h3><div class="metric-val" id="quantum-qubits" style="color:var(--accent);text-shadow:0 0 12px var(--ga)">0</div></div>
+            <div class="metric-box"><h3>Coherence Time</h3><div class="metric-val" id="quantum-coherence" style="color:var(--green);text-shadow:0 0 12px var(--gg)">0 μs</div></div>
+            <div class="metric-box"><h3>Fidelity</h3><div class="metric-val" id="quantum-fidelity" style="color:var(--orange);text-shadow:0 0 12px var(--go)">0%</div></div>
+            <div class="metric-box"><h3>Gate Operations</h3><div class="metric-val" id="quantum-gates" style="color:var(--purple);text-shadow:0 0 12px var(--gp)">0</div></div>
+        </div>
+
+        <div class="grid-asymmetric">
+            <div class="card">
+                <h2>Quantum Circuit</h2>
+                <canvas id="quantumCircuitCanvas" style="width:100%;height:280px;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:5px;display:block"></canvas>
+            </div>
+            <div class="card">
+                <h2>Qubit State Visualization</h2>
+                <canvas id="qubitStateCanvas" style="width:100%;height:280px;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:5px;display:block"></canvas>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top:18px">
+            <h2>Algorithm Simulation</h2>
+            <div style="display:flex;gap:8px;margin-bottom:15px">
+                <button onclick="QuantumSim.runGrover()" style="flex:1;background:rgba(0,229,255,0.1);border:1px solid var(--accent);color:var(--accent);padding:8px;border-radius:3px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:0.7rem;font-weight:700">GROVER'S SEARCH</button>
+                <button onclick="QuantumSim.runShor()" style="flex:1;background:rgba(0,255,136,0.1);border:1px solid var(--green);color:var(--green);padding:8px;border-radius:3px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:0.7rem;font-weight:700">SHOR'S FACTORING</button>
+                <button onclick="QuantumSim.runQFT()" style="flex:1;background:rgba(255,179,0,0.1);border:1px solid var(--orange);color:var(--orange);padding:8px;border-radius:3px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:0.7rem;font-weight:700">QUANTUM FFT</button>
+            </div>
+            <div class="chart-wrap" style="height:200px"><canvas id="quantumResultsChart"></canvas><div class="chart-glow-overlay"></div></div>
         </div>
     </div>
 
@@ -2202,6 +2406,1131 @@ function logSecurityChange() {
 }
 
 // ════════════════════════════════════════════
+// CRYPTO TRADING MODULE
+// ════════════════════════════════════════════
+const CryptoTrading = {
+    portfolio: {
+        value: 100000,
+        pnl: 0,
+        positions: [],
+        trades: [],
+        balance: 100000
+    },
+    assets: {
+        BTC: { price: 67500, history: [], volume: 0, high: 0, low: 0, change: 0, candles: [] },
+        ETH: { price: 3450, history: [], volume: 0, high: 0, low: 0, change: 0, candles: [] },
+        SOL: { price: 145, history: [], volume: 0, high: 0, low: 0, change: 0, candles: [] },
+        XRP: { price: 0.52, history: [], volume: 0, high: 0, low: 0, change: 0, candles: [] }
+    },
+    indicators: {
+        rsi: [],
+        macd: { line: [], signal: [], histogram: [] }
+    },
+    
+    init() {
+        try {
+            console.log('CryptoTrading: Initializing...');
+            this.initCharts();
+            this.initCandlestickData();
+            this.updateOrderBook();
+            this.updatePortfolio();
+            setInterval(() => this.updateOrderBook(), 1000);
+            setInterval(() => this.updatePrices(), 2000);
+            setInterval(() => this.updatePortfolio(), 3000);
+            setInterval(() => this.updateCandlesticks(), 5000);
+            setInterval(() => this.updateIndicators(), 3000);
+            console.log('CryptoTrading: Initialization complete');
+        } catch (error) {
+            console.error('CryptoTrading: Initialization error', error);
+        }
+    },
+    
+    initCharts() {
+        // Candlestick chart
+        const candleCtx = document.getElementById('cryptoCandlestickChart');
+        if (candleCtx) {
+            this.candlestickChart = new Chart(candleCtx.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: Array(30).fill(''),
+                    datasets: [{
+                        label: 'Price',
+                        data: Array(30).fill(0),
+                        backgroundColor: [],
+                        borderColor: [],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { display: false },
+                        x: { display: false }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+        
+        // Vision chart (price history - similar to finance tab)
+        const visionCtx = document.getElementById('cryptoVisionChart');
+        if (visionCtx) {
+            this.visionChart = new Chart(visionCtx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ['t-4', 't-3', 't-2', 't-1', 'NÅ'],
+                    datasets: [{
+                        data: Array(5).fill(0),
+                        borderColor: '#0f0',
+                        backgroundColor: 'rgba(0,255,0,0.1)',
+                        borderWidth: 2.5,
+                        tension: 0.45,
+                        pointRadius: 4,
+                        fill: true,
+                        pointBackgroundColor: '#0f0',
+                        pointBorderColor: 'rgba(0,255,0,0.5)',
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { display: false },
+                        x: { display: false }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+        
+        // RSI Chart
+        const rsiCtx = document.getElementById('cryptoRSIChart');
+        if (rsiCtx) {
+            this.rsiChart = new Chart(rsiCtx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: Array(30).fill(''),
+                    datasets: [{
+                        label: 'RSI',
+                        data: Array(30).fill(50),
+                        borderColor: '#0f0',
+                        backgroundColor: 'rgba(0,255,0,0.1)',
+                        tension: 0.3,
+                        fill: true,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { min: 0, max: 100, display: false },
+                        x: { display: false }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+        
+        // MACD Chart
+        const macdCtx = document.getElementById('cryptoMACDChart');
+        if (macdCtx) {
+            this.macdChart = new Chart(macdCtx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: Array(30).fill(''),
+                    datasets: [{
+                        label: 'MACD',
+                        data: Array(30).fill(0),
+                        borderColor: '#0f0',
+                        backgroundColor: 'transparent',
+                        tension: 0.3,
+                        pointRadius: 0
+                    }, {
+                        label: 'Signal',
+                        data: Array(30).fill(0),
+                        borderColor: '#ff0',
+                        backgroundColor: 'transparent',
+                        tension: 0.3,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { display: false },
+                        x: { display: false }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+    },
+    
+    initCandlestickData() {
+        Object.keys(this.assets).forEach(asset => {
+            let price = this.assets[asset].price;
+            this.assets[asset].high = price;
+            this.assets[asset].low = price;
+            
+            // Generate historical candles
+            for (let i = 0; i < 30; i++) {
+                const open = price;
+                const change = (Math.random() - 0.5) * 0.02;
+                const close = price * (1 + change);
+                const high = Math.max(open, close) * (1 + Math.random() * 0.01);
+                const low = Math.min(open, close) * (1 - Math.random() * 0.01);
+                
+                this.assets[asset].candles.push({ open, high, low, close });
+                this.assets[asset].history.push(close);
+                this.assets[asset].high = Math.max(this.assets[asset].high, high);
+                this.assets[asset].low = Math.min(this.assets[asset].low, low);
+                
+                price = close;
+            }
+            
+            this.assets[asset].change = ((price - this.assets[asset].history[0]) / this.assets[asset].history[0] * 100);
+        });
+    },
+    
+    updateOrderBook() {
+        try {
+            const assetSelect = document.getElementById('crypto-asset');
+            if (!assetSelect) return;
+            
+            const asset = assetSelect.value;
+            const price = this.assets[asset].price;
+            
+            let asksHTML = '';
+            let bidsHTML = '';
+            
+            for (let i = 0; i < 10; i++) {
+                const askPrice = price * (1 + (i + 1) * 0.0003);
+                const bidPrice = price * (1 - (i + 1) * 0.0003);
+                const size = Math.random() * 10 + 0.1;
+                
+                const askTotal = askPrice * size;
+                const bidTotal = bidPrice * size;
+                
+                asksHTML += `<div style="display:flex;justify-content:space-between;padding:3px 0;color:#f00;border-bottom:1px solid rgba(255,0,0,0.1)"><span>${askPrice.toFixed(2)}</span><span>${size.toFixed(4)}</span><span>${askTotal.toFixed(2)}</span></div>`;
+                bidsHTML += `<div style="display:flex;justify-content:space-between;padding:3px 0;color:#0f0;border-bottom:1px solid rgba(0,255,0,0.1)"><span>${bidPrice.toFixed(2)}</span><span>${size.toFixed(4)}</span><span>${bidTotal.toFixed(2)}</span></div>`;
+            }
+            
+            const asksEl = document.getElementById('crypto-asks');
+            const bidsEl = document.getElementById('crypto-bids');
+            const spreadEl = document.getElementById('crypto-spread');
+            
+            if (asksEl) asksEl.innerHTML = asksHTML;
+            if (bidsEl) bidsEl.innerHTML = bidsHTML;
+            if (spreadEl) spreadEl.textContent = `SPREAD: ${(price * 0.0006).toFixed(2)} | ${(price * 0.0006 / price * 100).toFixed(4)}%`;
+        } catch (error) {
+            console.error('CryptoTrading: updateOrderBook error', error);
+        }
+    },
+    
+    updatePrices() {
+        Object.keys(this.assets).forEach(asset => {
+            const volatility = asset === 'BTC' ? 0.001 : asset === 'ETH' ? 0.0015 : 0.002;
+            const change = (Math.random() - 0.5) * volatility;
+            this.assets[asset].price *= (1 + change);
+            this.assets[asset].history.push(this.assets[asset].price);
+            this.assets[asset].high = Math.max(this.assets[asset].high, this.assets[asset].price);
+            this.assets[asset].low = Math.min(this.assets[asset].low, this.assets[asset].price);
+            this.assets[asset].volume += Math.random() * 1000000;
+            
+            if (this.assets[asset].history.length > 50) {
+                this.assets[asset].history.shift();
+            }
+            
+            this.assets[asset].change = ((this.assets[asset].price - this.assets[asset].history[0]) / this.assets[asset].history[0] * 100);
+        });
+        
+        const currentAsset = document.getElementById('crypto-asset').value;
+        
+        // Update vision chart with last 5 data points
+        if (this.visionChart) {
+            const recentHistory = this.assets[currentAsset].history.slice(-5);
+            this.visionChart.data.datasets[0].data = [...recentHistory];
+            this.visionChart.update('none');
+        }
+    },
+    
+    updateCandlesticks() {
+        const asset = document.getElementById('crypto-asset').value;
+        const price = this.assets[asset].price;
+        
+        const open = this.assets[asset].candles[this.assets[asset].candles.length - 1]?.close || price;
+        const change = (Math.random() - 0.5) * 0.01;
+        const close = price * (1 + change);
+        const high = Math.max(open, close) * (1 + Math.random() * 0.005);
+        const low = Math.min(open, close) * (1 - Math.random() * 0.005);
+        
+        this.assets[asset].candles.push({ open, high, low, close });
+        if (this.assets[asset].candles.length > 30) this.assets[asset].candles.shift();
+        
+        // Update candlestick chart
+        if (this.candlestickChart) {
+            const candles = this.assets[asset].candles;
+            this.candlestickChart.data.datasets[0].data = candles.map(c => c.close);
+            this.candlestickChart.data.datasets[0].backgroundColor = candles.map(c => c.close >= c.open ? 'rgba(0,255,0,0.5)' : 'rgba(255,0,0,0.5)');
+            this.candlestickChart.data.datasets[0].borderColor = candles.map(c => c.close >= c.open ? '#0f0' : '#f00');
+            this.candlestickChart.update('none');
+        }
+    },
+    
+    updateIndicators() {
+        const asset = document.getElementById('crypto-asset').value;
+        const prices = this.assets[asset].history;
+        
+        // Calculate RSI
+        if (prices.length >= 14) {
+            let gains = 0, losses = 0;
+            for (let i = prices.length - 14; i < prices.length; i++) {
+                const change = prices[i] - prices[i - 1];
+                if (change > 0) gains += change;
+                else losses -= change;
+            }
+            const avgGain = gains / 14;
+            const avgLoss = losses / 14;
+            const rs = avgLoss === 0 ? 100 : avgGain / avgLoss;
+            const rsi = 100 - (100 / (1 + rs));
+            
+            this.indicators.rsi.push(rsi);
+            if (this.indicators.rsi.length > 30) this.indicators.rsi.shift();
+            
+            if (this.rsiChart) {
+                this.rsiChart.data.datasets[0].data = [...this.indicators.rsi];
+                this.rsiChart.update('none');
+            }
+        }
+        
+        // Calculate MACD
+        if (prices.length >= 26) {
+            const ema12 = this.calculateEMA(prices, 12);
+            const ema26 = this.calculateEMA(prices, 26);
+            const macd = ema12 - ema26;
+            
+            this.indicators.macd.line.push(macd);
+            if (this.indicators.macd.line.length > 30) this.indicators.macd.line.shift();
+            
+            const signal = this.calculateEMA(this.indicators.macd.line, 9);
+            this.indicators.macd.signal.push(signal);
+            if (this.indicators.macd.signal.length > 30) this.indicators.macd.signal.shift();
+            
+            if (this.macdChart) {
+                this.macdChart.data.datasets[0].data = [...this.indicators.macd.line];
+                this.macdChart.data.datasets[1].data = [...this.indicators.macd.signal];
+                this.macdChart.update('none');
+            }
+        }
+    },
+    
+    calculateEMA(data, period) {
+        const k = 2 / (period + 1);
+        let ema = data[0];
+        for (let i = 1; i < data.length; i++) {
+            ema = data[i] * k + ema * (1 - k);
+        }
+        return ema;
+    },
+    
+    updatePortfolio() {
+        try {
+            let totalValue = this.portfolio.balance;
+            let totalPnL = 0;
+            
+            this.portfolio.positions.forEach(pos => {
+                const currentPrice = this.assets[pos.asset].price;
+                const positionValue = pos.amount * currentPrice;
+                const pnl = (currentPrice - pos.price) * pos.amount;
+                
+                totalValue += positionValue;
+                totalPnL += pnl;
+            });
+            
+            this.portfolio.value = totalValue;
+            this.portfolio.pnl = totalPnL;
+            
+            const portfolioEl = document.getElementById('crypto-portfolio');
+            const pnlEl = document.getElementById('crypto-pnl');
+            const positionsEl = document.getElementById('crypto-positions');
+            const winrateEl = document.getElementById('crypto-winrate');
+            
+            if (portfolioEl) portfolioEl.textContent = '$' + totalValue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            if (pnlEl) {
+                pnlEl.textContent = '$' + totalPnL.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                pnlEl.style.color = totalPnL >= 0 ? '#0f0' : '#f00';
+            }
+            if (positionsEl) positionsEl.textContent = this.portfolio.positions.length;
+            
+            const winRate = this.portfolio.trades.length > 0 ? 
+                (this.portfolio.trades.filter(t => t.pnl > 0).length / this.portfolio.trades.length * 100).toFixed(1) : 0;
+            if (winrateEl) winrateEl.textContent = winRate + '%';
+        } catch (error) {
+            console.error('CryptoTrading: updatePortfolio error', error);
+        }
+    },
+    
+    placeOrder(type) {
+        try {
+            const assetSelect = document.getElementById('crypto-asset');
+            const amountInput = document.getElementById('crypto-amount');
+            const orderTypeSelect = document.getElementById('crypto-order-type');
+            
+            if (!assetSelect || !amountInput || !orderTypeSelect) {
+                console.error('CryptoTrading: Missing DOM elements for order placement');
+                return;
+            }
+            
+            const asset = assetSelect.value;
+            const amount = parseFloat(amountInput.value);
+            const orderType = orderTypeSelect.value;
+            const price = this.assets[asset].price;
+            
+            const orderValue = amount * price;
+            
+            if (type === 'buy' && orderValue > this.portfolio.balance) {
+                sysLog('INSUFFICIENT_BALANCE for buy order', 'ERR');
+                return;
+            }
+            
+            const trade = {
+                asset,
+                type,
+                orderType,
+                amount,
+                price,
+                value: orderValue,
+                timestamp: new Date(),
+                pnl: 0,
+                status: 'FILLED'
+            };
+            
+            if (type === 'buy') {
+                this.portfolio.balance -= orderValue;
+                this.portfolio.positions.push(trade);
+            } else {
+                const existingPosition = this.portfolio.positions.find(p => p.asset === asset);
+                if (existingPosition && existingPosition.amount >= amount) {
+                    existingPosition.amount -= amount;
+                    trade.pnl = (price - existingPosition.price) * amount;
+                    this.portfolio.balance += orderValue;
+                    
+                    if (existingPosition.amount === 0) {
+                        this.portfolio.positions = this.portfolio.positions.filter(p => p !== existingPosition);
+                    }
+                } else {
+                    sysLog('INSUFFICIENT_POSITION for sell order', 'ERR');
+                    return;
+                }
+            }
+            
+            this.portfolio.trades.push(trade);
+            this.updateOrderHistory();
+            sysLog(`[${type.toUpperCase()}] ${amount} ${asset} @ ${price.toFixed(2)} (${orderType.toUpperCase()})`, 'INFO');
+        } catch (error) {
+            console.error('CryptoTrading: placeOrder error', error);
+        }
+    },
+    
+    updateOrderHistory() {
+        try {
+            const historyDiv = document.getElementById('crypto-order-history');
+            if (!historyDiv) return;
+            
+            const recentTrades = this.portfolio.trades.slice(-10).reverse();
+            
+            historyDiv.innerHTML = recentTrades.map(t => `
+                <div style="padding:8px;border-bottom:1px solid #0f0">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                        <span style="color:${t.type === 'buy' ? '#0f0' : '#f00'}">[${t.type.toUpperCase()}]</span>
+                        <span style="color:#0f0">${t.asset}</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px">
+                        <span style="color:#0f0">${t.amount.toFixed(4)} @ ${t.price.toFixed(2)}</span>
+                        <span style="color:${t.pnl >= 0 ? '#0f0' : '#f00'}">${t.pnl >= 0 ? '+' : ''}${t.pnl.toFixed(2)}</span>
+                    </div>
+                    <div style="color:#0f0;font-size:0.65rem;margin-top:4px">${t.timestamp.toLocaleTimeString()}</div>
+                </div>
+            `).join('');
+        } catch (error) {
+            console.error('CryptoTrading: updateOrderHistory error', error);
+        }
+    }
+};
+
+// ════════════════════════════════════════════
+// ML TRAINING MODULE
+// ════════════════════════════════════════════
+const MLTraining = {
+    models: [
+        { name: 'ResNet-50', epoch: 0, loss: 2.5, accuracy: 10, valLoss: 2.6, valAccuracy: 9 },
+        { name: 'BERT-Base', epoch: 0, loss: 3.2, accuracy: 8, valLoss: 3.3, valAccuracy: 7 },
+        { name: 'GPT-2', epoch: 0, loss: 4.1, accuracy: 5, valLoss: 4.2, valAccuracy: 4 }
+    ],
+    currentModel: 0,
+    
+    init() {
+        this.initCharts();
+        this.initGPUHeatmap();
+        this.startTraining();
+    },
+    
+    initCharts() {
+        const ctx = document.getElementById('mlTrainingChart').getContext('2d');
+        this.chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Training Loss',
+                    data: [],
+                    borderColor: '#ff1a4a',
+                    backgroundColor: 'rgba(255,26,74,0.1)',
+                    tension: 0.3,
+                    fill: true,
+                    yAxisID: 'y'
+                }, {
+                    label: 'Validation Loss',
+                    data: [],
+                    borderColor: '#ffb300',
+                    backgroundColor: 'rgba(255,179,0,0.1)',
+                    tension: 0.3,
+                    fill: true,
+                    yAxisID: 'y'
+                }, {
+                    label: 'Training Accuracy',
+                    data: [],
+                    borderColor: '#00ff88',
+                    backgroundColor: 'rgba(0,255,136,0.1)',
+                    tension: 0.3,
+                    fill: true,
+                    yAxisID: 'y1'
+                }, {
+                    label: 'Validation Accuracy',
+                    data: [],
+                    borderColor: '#00e5ff',
+                    backgroundColor: 'rgba(0,229,255,0.1)',
+                    tension: 0.3,
+                    fill: true,
+                    yAxisID: 'y1'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { position: 'left', title: { display: true, text: 'Loss' } },
+                    y1: { position: 'right', title: { display: true, text: 'Accuracy %' }, min: 0, max: 100 }
+                }
+            }
+        });
+    },
+    
+    initGPUHeatmap() {
+        const heatmap = document.getElementById('gpu-heatmap');
+        for (let i = 0; i < 64; i++) {
+            const cell = document.createElement('div');
+            cell.style.background = `rgba(0,229,255,${Math.random() * 0.8})`;
+            cell.style.height = '15px';
+            heatmap.appendChild(cell);
+        }
+        
+        setInterval(() => {
+            Array.from(heatmap.children).forEach(cell => {
+                cell.style.background = `rgba(0,229,255,${Math.random() * 0.8})`;
+            });
+        }, 200);
+    },
+    
+    startTraining() {
+        setInterval(() => {
+            const model = this.models[this.currentModel];
+            model.epoch++;
+            
+            // Realistic training curves
+            const epochFactor = 1 / (1 + model.epoch * 0.01);
+            model.loss = 0.1 + 2.4 * epochFactor + (Math.random() - 0.5) * 0.1;
+            model.valLoss = 0.15 + 2.45 * epochFactor + (Math.random() - 0.5) * 0.12;
+            model.accuracy = Math.min(99, 10 + 89 * (1 - epochFactor) + (Math.random() - 0.5) * 2);
+            model.valAccuracy = Math.min(98, 9 + 89 * (1 - epochFactor) + (Math.random() - 0.5) * 2);
+            
+            document.getElementById('ml-epoch').textContent = `${model.epoch}/1000`;
+            document.getElementById('ml-loss').textContent = model.loss.toFixed(4);
+            document.getElementById('ml-acc').textContent = model.accuracy.toFixed(1) + '%';
+            document.getElementById('ml-gpu').textContent = (12 + Math.random() * 4).toFixed(1) + ' GB';
+            
+            if (this.chart) {
+                this.chart.data.labels.push(model.epoch);
+                this.chart.data.datasets[0].data.push(model.loss);
+                this.chart.data.datasets[1].data.push(model.valLoss);
+                this.chart.data.datasets[2].data.push(model.accuracy);
+                this.chart.data.datasets[3].data.push(model.valAccuracy);
+                
+                if (this.chart.data.labels.length > 50) {
+                    this.chart.data.labels.shift();
+                    this.chart.data.datasets.forEach(ds => ds.data.shift());
+                }
+                this.chart.update('none');
+            }
+            
+            // Cycle through models
+            if (model.epoch % 100 === 0) {
+                this.currentModel = (this.currentModel + 1) % this.models.length;
+                sysLog(`Switched to model: ${this.models[this.currentModel].name}`, 'INFO');
+            }
+        }, 500);
+    }
+};
+
+// ════════════════════════════════════════════
+// NETWORK INTEL MODULE
+// ════════════════════════════════════════════
+const NetworkIntel = {
+    devices: [],
+    packets: [],
+    trafficFlow: [],
+    
+    init() {
+        this.initTopology();
+        this.initTrafficChart();
+        this.initPacketCapture();
+        this.discoverDevices();
+        setInterval(() => this.updateMetrics(), 2000);
+        setInterval(() => this.simulateTrafficFlow(), 500);
+    },
+    
+    initTopology() {
+        const canvas = document.getElementById('networkTopologyCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        canvas.width = 460;
+        canvas.height = 280;
+        
+        const nodes = [];
+        for (let i = 0; i < 10; i++) {
+            nodes.push({
+                x: 50 + Math.random() * 360,
+                y: 50 + Math.random() * 180,
+                size: 5 + Math.random() * 10,
+                type: ['Router', 'Switch', 'Server', 'Firewall'][Math.floor(Math.random() * 4)]
+            });
+        }
+        
+        const animate = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw connections with traffic flow
+            ctx.strokeStyle = 'rgba(0,229,255,0.2)';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    ctx.beginPath();
+                    ctx.moveTo(nodes[i].x, nodes[i].y);
+                    ctx.lineTo(nodes[j].x, nodes[j].y);
+                    ctx.stroke();
+                    
+                    // Draw traffic packets
+                    if (Math.random() > 0.7) {
+                        const t = (Date.now() / 1000 + i + j) % 1;
+                        const px = nodes[i].x + (nodes[j].x - nodes[i].x) * t;
+                        const py = nodes[i].y + (nodes[j].y - nodes[i].y) * t;
+                        ctx.beginPath();
+                        ctx.arc(px, py, 3, 0, Math.PI * 2);
+                        ctx.fillStyle = '#00ff88';
+                        ctx.fill();
+                    }
+                }
+            }
+            
+            // Draw nodes
+            nodes.forEach(node => {
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, node.size, 0, Math.PI * 2);
+                ctx.fillStyle = node.type === 'Router' ? '#ff1a4a' : 
+                             node.type === 'Server' ? '#00ff88' : '#00e5ff';
+                ctx.fill();
+                
+                // Glow effect
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = ctx.fillStyle;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            });
+            
+            requestAnimationFrame(animate);
+        };
+        animate();
+    },
+    
+    initTrafficChart() {
+        const ctx = document.getElementById('networkTrafficChart').getContext('2d');
+        this.trafficChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array(30).fill(''),
+                datasets: [{
+                    label: 'Inbound',
+                    data: Array(30).fill(0).map(() => Math.random() * 100),
+                    borderColor: '#00e5ff',
+                    backgroundColor: 'rgba(0,229,255,0.1)',
+                    tension: 0.3,
+                    fill: true,
+                    pointRadius: 0
+                }, {
+                    label: 'Outbound',
+                    data: Array(30).fill(0).map(() => Math.random() * 100),
+                    borderColor: '#ff1a4a',
+                    backgroundColor: 'rgba(255,26,74,0.1)',
+                    tension: 0.3,
+                    fill: true,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { y: { display: false }, x: { display: false } },
+                plugins: { legend: { display: true, labels: { color: '#304a60', font: { size: 8 } } } }
+            }
+        });
+    },
+    
+    initPacketCapture() {
+        setInterval(() => {
+            const protocols = ['TCP', 'UDP', 'HTTP', 'HTTPS', 'SSH', 'FTP'];
+            const sources = ['192.168.1.100', '10.0.0.50', '172.16.0.25', '192.168.0.200'];
+            const destinations = ['8.8.8.8', '1.1.1.1', '142.250.185.78', '172.217.0.142'];
+            
+            const packet = {
+                timestamp: new Date().toLocaleTimeString(),
+                protocol: protocols[Math.floor(Math.random() * protocols.length)],
+                source: sources[Math.floor(Math.random() * sources.length)],
+                destination: destinations[Math.floor(Math.random() * destinations.length)],
+                size: Math.floor(Math.random() * 1500) + 64,
+                flags: ['SYN', 'ACK', 'FIN', 'PSH'][Math.floor(Math.random() * 4)]
+            };
+            
+            this.packets.unshift(packet);
+            if (this.packets.length > 20) this.packets.pop();
+        }, 500);
+    },
+    
+    simulateTrafficFlow() {
+        if (this.trafficChart) {
+            const inbound = Math.random() * 100;
+            const outbound = Math.random() * 100;
+            
+            this.trafficChart.data.datasets[0].data.push(inbound);
+            this.trafficChart.data.datasets[1].data.push(outbound);
+            
+            this.trafficChart.data.datasets[0].data.shift();
+            this.trafficChart.data.datasets[1].data.shift();
+            
+            this.trafficChart.update('none');
+        }
+    },
+    
+    discoverDevices() {
+        const deviceTypes = ['Router', 'Switch', 'Server', 'Workstation', 'Firewall', 'Load Balancer', 'Gateway', 'NAS'];
+        const osTypes = ['Linux', 'Windows Server', 'macOS', 'FreeBSD', 'Ubuntu', 'CentOS'];
+        
+        for (let i = 0; i < 15; i++) {
+            this.devices.push({
+                name: `${deviceTypes[Math.floor(Math.random() * deviceTypes.length)]}-${i}`,
+                ip: `192.168.1.${100 + i}`,
+                mac: `00:1A:2B:3C:4D:${50 + i.toString(16).padStart(2, '0').toUpperCase()}`,
+                os: osTypes[Math.floor(Math.random() * osTypes.length)],
+                status: Math.random() > 0.1 ? 'Online' : 'Offline',
+                bandwidth: (Math.random() * 1000).toFixed(0) + ' Mbps',
+                uptime: Math.floor(Math.random() * 8760) + 'h',
+                ports: Math.floor(Math.random() * 65535)
+            });
+        }
+        this.renderDevices();
+    },
+    
+    renderDevices() {
+        const table = document.getElementById('device-table');
+        table.innerHTML = this.devices.map(d => `
+            <tr>
+                <td>${d.name}</td>
+                <td>${d.ip}</td>
+                <td>${d.mac}</td>
+                <td>${d.os}</td>
+                <td style="color:${d.status === 'Online' ? 'var(--green)' : 'var(--red)'}">${d.status}</td>
+                <td>${d.bandwidth}</td>
+            </tr>
+        `).join('');
+    },
+    
+    updateMetrics() {
+        document.getElementById('net-bandwidth').textContent = (10 + Math.random() * 5).toFixed(1) + ' Gbps';
+        document.getElementById('net-connections').textContent = Math.floor(1000 + Math.random() * 500);
+        document.getElementById('net-packets').textContent = Math.floor(50000 + Math.random() * 20000);
+        document.getElementById('net-latency').textContent = Math.floor(5 + Math.random() * 10) + ' ms';
+    }
+};
+
+// ════════════════════════════════════════════
+// BLOCKCHAIN MODULE
+// ════════════════════════════════════════════
+const Blockchain = {
+    blockHeight: 18000000,
+    blocks: [],
+    mempool: [],
+    gasHistory: [],
+    
+    init() {
+        this.updateMetrics();
+        setInterval(() => this.updateMetrics(), 5000);
+        setInterval(() => this.generateBlock(), 12000);
+        setInterval(() => this.updateMempool(), 2000);
+        setInterval(() => this.updateGasPrice(), 3000);
+        this.generateTransactions();
+    },
+    
+    updateMetrics() {
+        this.blockHeight += Math.floor(Math.random() * 3);
+        document.getElementById('block-height').textContent = this.blockHeight.toLocaleString();
+        document.getElementById('block-time').textContent = (12 + Math.random() * 2).toFixed(1) + 's';
+        document.getElementById('block-txs').textContent = Math.floor(150 + Math.random() * 100);
+        document.getElementById('block-gas').textContent = Math.floor(20 + Math.random() * 30) + ' Gwei';
+    },
+    
+    generateBlock() {
+        const block = {
+            number: this.blockHeight,
+            timestamp: new Date(),
+            transactions: Math.floor(150 + Math.random() * 100),
+            gasUsed: Math.floor(8000000 + Math.random() * 5000000),
+            gasLimit: 15000000,
+            baseFee: (20 + Math.random() * 30).toFixed(2),
+            miner: '0x' + Array(40).fill(0).map(() => Math.floor(Math.random() * 16).toString(16)).join('')
+        };
+        
+        this.blocks.unshift(block);
+        if (this.blocks.length > 10) this.blocks.pop();
+        
+        sysLog(`Block #${block.number} mined with ${block.transactions} transactions`, 'INFO');
+    },
+    
+    updateMempool() {
+        const txTypes = ['Transfer', 'Swap', 'Mint', 'Burn', 'Approve'];
+        const tokens = ['ETH', 'USDC', 'USDT', 'DAI', 'WBTC'];
+        
+        for (let i = 0; i < 3; i++) {
+            const tx = {
+                hash: '0x' + Array(64).fill(0).map(() => Math.floor(Math.random() * 16).toString(16)).join(''),
+                type: txTypes[Math.floor(Math.random() * txTypes.length)],
+                from: '0x' + Array(40).fill(0).map(() => Math.floor(Math.random() * 16).toString(16)).join(''),
+                to: '0x' + Array(40).fill(0).map(() => Math.floor(Math.random() * 16).toString(16)).join(''),
+                value: (Math.random() * 10).toFixed(4) + ' ' + tokens[Math.floor(Math.random() * tokens.length)],
+                gasPrice: Math.floor(20 + Math.random() * 30) + ' Gwei',
+                gasLimit: Math.floor(21000 + Math.random() * 100000),
+                nonce: Math.floor(Math.random() * 1000000)
+            };
+            
+            this.mempool.unshift(tx);
+            if (this.mempool.length > 50) this.mempool.pop();
+        }
+    },
+    
+    updateGasPrice() {
+        const gasPrice = Math.floor(20 + Math.random() * 30);
+        this.gasHistory.push(gasPrice);
+        if (this.gasHistory.length > 20) this.gasHistory.shift();
+    },
+    
+    generateTransactions() {
+        const txList = document.getElementById('tx-list');
+        const contractList = document.getElementById('contract-list');
+        
+        txList.innerHTML = this.mempool.slice(0, 10).map(tx => `
+            <div style="padding:8px;border-bottom:1px solid var(--border)">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                    <span style="color:var(--accent);font-size:0.65rem">${tx.hash.substring(0, 16)}...</span>
+                    <span style="color:var(--muted);font-size:0.65rem">${tx.type}</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px">
+                    <span style="color:var(--muted);font-size:0.65rem">${tx.value}</span>
+                    <span style="color:var(--orange);font-size:0.65rem">${tx.gasPrice}</span>
+                </div>
+            </div>
+        `).join('');
+        
+        const contracts = [
+            { name: 'Uniswap V3', interactions: Math.floor(Math.random() * 1000) },
+            { name: 'Aave V3', interactions: Math.floor(Math.random() * 500) },
+            { name: 'Curve DAO', interactions: Math.floor(Math.random() * 300) },
+            { name: 'Compound', interactions: Math.floor(Math.random() * 200) },
+            { name: 'MakerDAO', interactions: Math.floor(Math.random() * 150) }
+        ];
+        
+        contractList.innerHTML = contracts.map(c => `
+            <div style="padding:8px;border-bottom:1px solid var(--border)">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                    <span style="color:var(--green)">${c.name}</span>
+                    <span style="color:var(--muted);font-size:0.65rem">${c.interactions} txs</span>
+                </div>
+                <div style="color:var(--muted);font-size:0.65rem;margin-top:4px">Last interaction: ${Math.floor(Math.random() * 60)}s ago</div>
+            </div>
+        `).join('');
+    }
+};
+
+// ════════════════════════════════════════════
+// QUANTUM SIMULATOR MODULE
+// ════════════════════════════════════════════
+const QuantumSim = {
+    qubits: 128,
+    gates: ['H', 'X', 'Y', 'Z', 'CNOT', 'SWAP', 'T', 'S', 'RX', 'RY', 'RZ'],
+    circuit: [],
+    entanglements: [],
+    
+    init() {
+        this.initCircuit();
+        this.initQubitStates();
+        this.initResultsChart();
+        this.updateMetrics();
+        setInterval(() => this.simulateQuantumNoise(), 1000);
+    },
+    
+    initCircuit() {
+        const canvas = document.getElementById('quantumCircuitCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        canvas.width = 460;
+        canvas.height = 280;
+        
+        // Initialize circuit
+        for (let i = 0; i < 8; i++) {
+            this.circuit.push([]);
+            for (let j = 0; j < 10; j++) {
+                this.circuit[i].push(this.gates[Math.floor(Math.random() * this.gates.length)]);
+            }
+        }
+        
+        const animate = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw quantum circuit
+            for (let i = 0; i < 8; i++) {
+                for (let j = 0; j < 10; j++) {
+                    const x = 50 + j * 40;
+                    const y = 50 + i * 28;
+                    
+                    // Draw gate box
+                    ctx.fillStyle = 'rgba(0,229,255,0.1)';
+                    ctx.fillRect(x - 15, y - 12, 30, 24);
+                    ctx.strokeStyle = '#00e5ff';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(x - 15, y - 12, 30, 24);
+                    
+                    // Draw gate label
+                    ctx.fillStyle = '#00e5ff';
+                    ctx.font = 'bold 12px monospace';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(this.circuit[i][j], x, y);
+                }
+            }
+            
+            // Draw qubit lines
+            ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < 8; i++) {
+                ctx.beginPath();
+                ctx.moveTo(30, 50 + i * 28);
+                ctx.lineTo(430, 50 + i * 28);
+                ctx.stroke();
+                
+                // Qubit label
+                ctx.fillStyle = '#304a60';
+                ctx.font = '10px monospace';
+                ctx.textAlign = 'right';
+                ctx.fillText(`q${i}`, 25, 50 + i * 28 + 3);
+            }
+            
+            requestAnimationFrame(animate);
+        };
+        animate();
+    },
+    
+    initQubitStates() {
+        const canvas = document.getElementById('qubitStateCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        canvas.width = 460;
+        canvas.height = 280;
+        
+        // Initialize qubit states
+        for (let i = 0; i < 4; i++) {
+            this.entanglements.push({
+                qubit1: i,
+                qubit2: i + 4,
+                entanglement: Math.random()
+            });
+        }
+        
+        const animate = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw Bloch spheres
+            for (let i = 0; i < 4; i++) {
+                const x = 60 + i * 110;
+                const y = 140;
+                
+                // Draw sphere
+                ctx.beginPath();
+                ctx.arc(x, y, 40, 0, Math.PI * 2);
+                ctx.strokeStyle = '#00ff88';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
+                // Draw equator
+                ctx.beginPath();
+                ctx.ellipse(x, y, 40, 15, 0, 0, Math.PI * 2);
+                ctx.strokeStyle = 'rgba(0,255,136,0.3)';
+                ctx.stroke();
+                
+                // Draw state vector
+                const angle = Date.now() / 1000 + i;
+                const theta = angle % (Math.PI * 2);
+                const phi = (angle / 2) % (Math.PI * 2);
+                
+                const px = x + Math.sin(theta) * Math.cos(phi) * 35;
+                const py = y - Math.cos(theta) * 35;
+                
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(px, py);
+                ctx.strokeStyle = '#ff1a4a';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
+                // Draw state point
+                ctx.beginPath();
+                ctx.arc(px, py, 5, 0, Math.PI * 2);
+                ctx.fillStyle = '#ff1a4a';
+                ctx.fill();
+                
+                // Draw entanglement line
+                if (i < this.entanglements.length) {
+                    const ent = this.entanglements[i];
+                    const x2 = 60 + (ent.qubit2 % 4) * 110;
+                    const y2 = 140;
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(x2, y2);
+                    ctx.strokeStyle = `rgba(255,179,0,${ent.entanglement})`;
+                    ctx.lineWidth = ent.entanglement * 3;
+                    ctx.stroke();
+                }
+                
+                // Label
+                ctx.fillStyle = '#304a60';
+                ctx.font = '10px monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText(`|ψ${i}⟩`, x, y + 55);
+            }
+            
+            requestAnimationFrame(animate);
+        };
+        animate();
+    },
+    
+    initResultsChart() {
+        const ctx = document.getElementById('quantumResultsChart').getContext('2d');
+        this.resultsChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['|000⟩', '|001⟩', '|010⟩', '|011⟩', '|100⟩', '|101⟩', '|110⟩', '|111⟩'],
+                datasets: [{
+                    label: 'Probability',
+                    data: [0, 0, 0, 0, 0, 0, 0, 0],
+                    backgroundColor: 'rgba(0,229,255,0.5)',
+                    borderColor: '#00e5ff',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true, max: 1 }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+    },
+    
+    updateMetrics() {
+        document.getElementById('quantum-qubits').textContent = this.qubits;
+        document.getElementById('quantum-coherence').textContent = (50 + Math.random() * 50).toFixed(1) + ' μs';
+        document.getElementById('quantum-fidelity').textContent = (95 + Math.random() * 5).toFixed(2) + '%';
+        document.getElementById('quantum-gates').textContent = Math.floor(10000 + Math.random() * 5000);
+    },
+    
+    simulateQuantumNoise() {
+        // Randomly mutate circuit gates
+        const qubit = Math.floor(Math.random() * 8);
+        const position = Math.floor(Math.random() * 10);
+        this.circuit[qubit][position] = this.gates[Math.floor(Math.random() * this.gates.length)];
+    },
+    
+    runGrover() {
+        sysLog('Running Grover\'s Search Algorithm on 3-qubit system...', 'INFO');
+        
+        // Simulate Grover's algorithm - amplifies the target state
+        const targetState = Math.floor(Math.random() * 8);
+        const iterations = 3;
+        const results = Array(8).fill(1/8);
+        
+        for (let i = 0; i < iterations; i++) {
+            results[targetState] *= 2.5;
+            const sum = results.reduce((a, b) => a + b, 0);
+            results = results.map(r => r / sum);
+        }
+        
+        this.resultsChart.data.datasets[0].data = results;
+        this.resultsChart.update();
+        
+        sysLog(`Grover\'s search complete. Target state |${targetState.toString(2).padStart(3, '0')}⟩ amplified`, 'SUCCESS');
+    },
+    
+    runShor() {
+        sysLog('Running Shor\'s Factoring Algorithm for N=15...', 'INFO');
+        
+        // Simulate Shor's algorithm - finds period
+        const period = Math.floor(Math.random() * 4) + 2;
+        const results = Array(8).fill(0);
+        results[period] = 1;
+        
+        this.resultsChart.data.datasets[0].data = results;
+        this.resultsChart.update();
+        
+        sysLog(`Shor\'s algorithm complete. Period r=${period}, factors: 3 and 5`, 'SUCCESS');
+    },
+    
+    runQFT() {
+        sysLog('Running Quantum Fourier Transform...', 'INFO');
+        
+        // Simulate QFT - creates uniform superposition
+        const results = Array(8).fill(0).map(() => Math.random());
+        const sum = results.reduce((a, b) => a + b, 0);
+        this.resultsChart.data.datasets[0].data = results.map(r => r / sum);
+        this.resultsChart.update();
+        
+        sysLog('Quantum Fourier Transform complete. Output state in superposition', 'SUCCESS');
+    }
+};
+
+// ════════════════════════════════════════════
 // WEATHER MODULE
 // ════════════════════════════════════════════
 const WeatherModule = {
@@ -3098,7 +4427,7 @@ function filterNews() {
 // ════════════════════════════════════════════
 // KEYBOARD SHORTCUTS
 // ════════════════════════════════════════════
-const tabIds = ['ai-tab', 'finans-tab', 'security-tab', 'weather-tab', 'news-tab', 'system-tab', 'norge-tab'];
+const tabIds = ['ai-tab', 'finans-tab', 'security-tab', 'crypto-tab', 'ml-tab', 'network-tab', 'blockchain-tab', 'quantum-tab', 'weather-tab', 'news-tab', 'system-tab', 'norge-tab'];
 const tabButtons = document.querySelectorAll('.tab-btn');
 
 document.addEventListener('keydown', (e) => {
@@ -3469,6 +4798,11 @@ PortfolioTracker.init();
 OrderBook.init();
 MarketSentiment.init();
 CorrelationMatrix.init();
+CryptoTrading.init();
+MLTraining.init();
+NetworkIntel.init();
+Blockchain.init();
+QuantumSim.init();
 
 sysLog("All modules initialized successfully","SUCCESS");
 NotificationSystem.success("Quantum Telemetry Core v2.0 Online");
