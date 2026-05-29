@@ -29,6 +29,28 @@
             --go: rgba(245,158,11,0.15);
             --gp: rgba(139,92,246,0.15);
         }
+
+        [data-theme="light"] {
+            --bg:      #f9fafb;
+            --bg-card: #ffffff;
+            --bg-input:#f3f4f6;
+            --border:  #e5e7eb;
+            --accent:  #3b82f6;
+            --accent2: #2563eb;
+            --green:   #10b981;
+            --red:     #ef4444;
+            --orange:  #f59e0b;
+            --purple:  #8b5cf6;
+            --norway:  #dc2626;
+            --text:    #111827;
+            --muted:   #6b7280;
+ 
+            --ga: rgba(59,130,246,0.1);
+            --gg: rgba(16,185,129,0.1);
+            --gr: rgba(239,68,68,0.1);
+            --go: rgba(245,158,11,0.1);
+            --gp: rgba(139,92,246,0.1);
+        }
  
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
  
@@ -629,6 +651,35 @@
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+        /* ─── THEME TOGGLE ─── */
+        .theme-toggle {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+        }
+        .theme-toggle:hover {
+            border-color: var(--accent);
+            box-shadow: 0 2px 8px rgba(59,130,246,0.2);
+        }
+        .theme-toggle svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--text);
+        }
+        .theme-toggle span {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--muted);
+            font-family: 'Inter', system-ui, sans-serif;
+        }
  
         /* ─── TICKER TAPE ─── */
         .ticker-container { overflow: hidden; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 18px; background: rgba(0,5,12,0.6); padding: 6px 0; }
@@ -643,15 +694,20 @@
 </head>
 <body>
  
-    <!-- Theme toggle button -->
-    <button class="theme-toggle" onclick="toggleTheme()">🌙 THEME</button>
-    
     <!-- Notification container -->
     <div class="notification-container" id="notification-container"></div>
     
     <div class="header-container">
         <h1>⬡ QUANTUM TELEMETRY CORE</h1>
-        <div class="live-tag">NODE: OSLO_CLUSTER_04 &nbsp;// &nbsp;LIVE</div>
+        <div style="display:flex;gap:12px;align-items:center">
+            <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+                <svg viewBox="0 0 24 24" id="theme-icon">
+                    <path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/>
+                </svg>
+                <span id="theme-text">Dark</span>
+            </button>
+            <div class="live-tag">NODE: OSLO_CLUSTER_04 &nbsp;// &nbsp;LIVE</div>
+        </div>
     </div>
  
     <div class="navigation">
@@ -663,6 +719,9 @@
         <button class="tab-btn" onclick="switchTab('network-tab',this)">🌐 NETWORK INTEL</button>
         <button class="tab-btn" onclick="switchTab('blockchain-tab',this)">⛓️ BLOCKCHAIN</button>
         <button class="tab-btn" onclick="switchTab('quantum-tab',this)">⚛️ QUANTUM</button>
+        <button class="tab-btn" onclick="switchTab('analytics-tab',this)">📊 DATA ANALYTICS</button>
+        <button class="tab-btn" onclick="switchTab('portfolio-tab',this)">💼 PORTFOLIO</button>
+        <button class="tab-btn" onclick="switchTab('intelligence-tab',this)">🎯 MARKET INTEL</button>
         <button class="tab-btn" onclick="switchTab('weather-tab',this)">🌤️ WEATHER & CLIMATE</button>
         <button class="tab-btn" onclick="switchTab('news-tab',this)">📰 TECH NEWS</button>
         <button class="tab-btn" onclick="switchTab('system-tab',this)">⚙️ SYSTEM MONITOR</button>
@@ -815,6 +874,8 @@
             <div class="card">
                 <h2 id="focus-title">Asset Focus: BTC</h2>
                 <div class="chart-wrap" style="height:145px;margin-bottom:14px"><canvas id="mktAssetChart"></canvas><div class="chart-glow-overlay"></div></div>
+                <h2>Candlestick Chart</h2>
+                <div class="chart-wrap" style="height:200px;margin-bottom:14px"><canvas id="candlestickChart"></canvas><div class="chart-glow-overlay"></div></div>
                 <h2>Technical Indicators</h2>
                 <div class="grid-4" style="margin-top:10px">
                     <div class="metric-box"><h3>RSI (14)</h3><div class="metric-val" id="tech-rsi" style="color:var(--accent);font-size:0.9rem">0</div></div>
@@ -1308,6 +1369,128 @@
         <div class="card" style="margin-top:18px">
             <h2>Quantum Machine Learning</h2>
             <div class="chart-wrap" style="height:200px"><canvas id="qmlChart"></canvas><div class="chart-glow-overlay"></div></div>
+        </div>
+    </div>
+
+    <!-- ══════════════ DATA ANALYTICS ══════════════ -->
+    <div id="analytics-tab" class="tab-content">
+        <div class="grid-4">
+            <div class="metric-box"><h3>Total KPIs</h3><div class="metric-val" id="analytics-total-kpis" style="color:var(--accent)">0</div></div>
+            <div class="metric-box"><h3>Active Dashboards</h3><div class="metric-val" id="analytics-dashboards" style="color:var(--green)">0</div></div>
+            <div class="metric-box"><h3>Data Points</h3><div class="metric-val" id="analytics-datapoints" style="color:var(--orange)">0</div></div>
+            <div class="metric-box"><h3>Reports Generated</h3><div class="metric-val" id="analytics-reports" style="color:var(--purple)">0</div></div>
+        </div>
+
+        <div class="grid-split">
+            <div class="card">
+                <h2>KPI Performance Overview</h2>
+                <div class="chart-wrap" style="height:250px;margin-bottom:16px"><canvas id="kpiPerformanceChart"></canvas><div class="chart-glow-overlay"></div></div>
+                <h2>Trend Analysis</h2>
+                <div class="chart-wrap" style="height:200px"><canvas id="trendAnalysisChart"></canvas><div class="chart-glow-overlay"></div></div>
+            </div>
+            <div class="card">
+                <h2>Custom KPIs</h2>
+                <div style="margin-bottom:16px">
+                    <input type="text" id="kpi-name" placeholder="KPI Name" style="width:100%;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;margin-bottom:8px;font-family:'Inter',system-ui,sans-serif;font-size:0.85rem;outline:none">
+                    <input type="number" id="kpi-value" placeholder="Value" style="width:100%;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;margin-bottom:8px;font-family:'Inter',system-ui,sans-serif;font-size:0.85rem;outline:none">
+                    <select id="kpi-target" style="width:100%;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;margin-bottom:8px;font-family:'Inter',system-ui,sans-serif;font-size:0.85rem;outline:none">
+                        <option value="increase">Target: Increase</option>
+                        <option value="decrease">Target: Decrease</option>
+                    </select>
+                    <button onclick="DataAnalytics.addKPI()" style="width:100%;background:var(--accent);border:none;color:#fff;padding:10px;border-radius:6px;cursor:pointer;font-family:'Inter',system-ui,sans-serif;font-size:0.85rem;font-weight:500;transition:all 0.2s ease">Add KPI</button>
+                </div>
+                <div id="kpi-list" style="max-height:300px;overflow-y:auto"></div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top:18px">
+            <h2>Data Export</h2>
+            <div style="display:flex;gap:12px;margin-bottom:16px">
+                <button onclick="DataAnalytics.exportCSV()" style="flex:1;background:rgba(16,185,129,0.15);border:1px solid var(--green);color:var(--green);padding:10px 16px;border-radius:8px;cursor:pointer;font-family:'Inter',system-ui,sans-serif;font-size:0.85rem;font-weight:500;transition:all 0.2s ease">Export CSV</button>
+                <button onclick="DataAnalytics.exportPDF()" style="flex:1;background:rgba(59,130,246,0.15);border:1px solid var(--accent);color:var(--accent);padding:10px 16px;border-radius:8px;cursor:pointer;font-family:'Inter',system-ui,sans-serif;font-size:0.85rem;font-weight:500;transition:all 0.2s ease">Export PDF</button>
+                <button onclick="DataAnalytics.generateReport()" style="flex:1;background:rgba(139,92,246,0.15);border:1px solid var(--purple);color:var(--purple);padding:10px 16px;border-radius:8px;cursor:pointer;font-family:'Inter',system-ui,sans-serif;font-size:0.85rem;font-weight:500;transition:all 0.2s ease">Generate Report</button>
+            </div>
+            <h2>Recent Reports</h2>
+            <div id="reports-list" style="max-height:200px;overflow-y:auto;font-family:'Inter',system-ui,sans-serif;font-size:0.85rem"></div>
+        </div>
+    </div>
+
+    <!-- ══════════════ PORTFOLIO MANAGEMENT ══════════════ -->
+    <div id="portfolio-tab" class="tab-content">
+        <div class="grid-4">
+            <div class="metric-box"><h3>Total Value</h3><div class="metric-val" id="portfolio-total" style="color:var(--accent)">$0</div></div>
+            <div class="metric-box"><h3>Today's P&L</h3><div class="metric-val" id="portfolio-pnl" style="color:var(--green)">+$0</div></div>
+            <div class="metric-box"><h3>Assets</h3><div class="metric-val" id="portfolio-assets" style="color:var(--orange)">0</div></div>
+            <div class="metric-box"><h3>Risk Score</h3><div class="metric-val" id="portfolio-risk" style="color:var(--purple)">Low</div></div>
+        </div>
+
+        <div class="grid-split">
+            <div class="card">
+                <h2>Portfolio Allocation</h2>
+                <div class="chart-wrap" style="height:280px;margin-bottom:16px"><canvas id="portfolioAllocationChart"></canvas><div class="chart-glow-overlay"></div></div>
+                <h2>Performance History</h2>
+                <div class="chart-wrap" style="height:200px"><canvas id="portfolioPerformanceChart"></canvas><div class="chart-glow-overlay"></div></div>
+            </div>
+            <div class="card">
+                <h2>Add Asset</h2>
+                <div style="margin-bottom:16px">
+                    <input type="text" id="asset-symbol" placeholder="Symbol (e.g., BTC)" style="width:100%;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;margin-bottom:8px;font-family:'Inter',system-ui,sans-serif;font-size:0.85rem;outline:none">
+                    <input type="number" id="asset-quantity" placeholder="Quantity" style="width:100%;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;margin-bottom:8px;font-family:'Inter',system-ui,sans-serif;font-size:0.85rem;outline:none">
+                    <input type="number" id="asset-price" placeholder="Price per unit" style="width:100%;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;margin-bottom:8px;font-family:'Inter',system-ui,sans-serif;font-size:0.85rem;outline:none">
+                    <button onclick="PortfolioManager.addAsset()" style="width:100%;background:var(--accent);border:none;color:#fff;padding:10px;border-radius:6px;cursor:pointer;font-family:'Inter',system-ui,sans-serif;font-size:0.85rem;font-weight:500;transition:all 0.2s ease">Add Asset</button>
+                </div>
+                <h2>Holdings</h2>
+                <div id="portfolio-holdings" style="max-height:300px;overflow-y:auto"></div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top:18px">
+            <h2>Risk Assessment</h2>
+            <div class="grid-4" style="margin-top:14px">
+                <div class="metric-box"><h3>Volatility</h3><div class="metric-val" id="risk-volatility" style="color:var(--accent)">Medium</div></div>
+                <div class="metric-box"><h3>Diversification</h3><div class="metric-val" id="risk-diversification" style="color:var(--green)">Good</div></div>
+                <div class="metric-box"><h3>Exposure</h3><div class="metric-val" id="risk-exposure" style="color:var(--orange)">Moderate</div></div>
+                <div class="metric-box"><h3>Liquidity</h3><div class="metric-val" id="risk-liquidity" style="color:var(--purple)">High</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════ MARKET INTELLIGENCE ══════════════ -->
+    <div id="intelligence-tab" class="tab-content">
+        <div class="grid-4">
+            <div class="metric-box"><h3>Sentiment Score</h3><div class="metric-val" id="intel-sentiment" style="color:var(--accent)">75</div></div>
+            <div class="metric-box"><h3>News Volume</h3><div class="metric-val" id="intel-news" style="color:var(--green)">1,234</div></div>
+            <div class="metric-box"><h3>Social Buzz</h3><div class="metric-val" id="intel-social" style="color:var(--orange)">High</div></div>
+            <div class="metric-box"><h3>Market Signals</h3><div class="metric-val" id="intel-signals" style="color:var(--purple)">3</div></div>
+        </div>
+
+        <div class="grid-split">
+            <div class="card">
+                <h2>Sentiment Analysis</h2>
+                <div class="chart-wrap" style="height:250px;margin-bottom:16px"><canvas id="sentimentChart"></canvas><div class="chart-glow-overlay"></div></div>
+                <h2>Market Correlation Heatmap</h2>
+                <div id="correlation-heatmap" style="display:grid;grid-template-columns:repeat(8,1fr);gap:2px;margin-top:14px"></div>
+            </div>
+            <div class="card">
+                <h2>Latest Intelligence</h2>
+                <div id="intel-feed" style="max-height:400px;overflow-y:auto"></div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top:18px">
+            <h2>Economic Calendar</h2>
+            <table style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Event</th>
+                        <th>Impact</th>
+                        <th>Actual</th>
+                        <th>Forecast</th>
+                    </tr>
+                </thead>
+                <tbody id="economic-calendar"></tbody>
+            </table>
         </div>
     </div>
 
@@ -4260,6 +4443,591 @@ const QuantumSim = {
 };
 
 // ════════════════════════════════════════════
+// DATA ANALYTICS MODULE
+// ════════════════════════════════════════════
+const DataAnalytics = {
+    kpis: [],
+    reports: [],
+    dataPoints: 0,
+    
+    init() {
+        this.initKPIPerformanceChart();
+        this.initTrendAnalysisChart();
+        this.updateMetrics();
+        this.renderKPIList();
+        this.renderReportsList();
+        setInterval(() => this.updateMetrics(), 3000);
+    },
+    
+    initKPIPerformanceChart() {
+        const ctx = document.getElementById('kpiPerformanceChart');
+        if (!ctx) return;
+        
+        this.kpiChart = new Chart(ctx.getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['Revenue', 'Users', 'Conversion', 'Retention', 'NPS'],
+                datasets: [{
+                    label: 'Current',
+                    data: [85, 72, 68, 91, 78],
+                    backgroundColor: 'rgba(59,130,246,0.7)',
+                    borderColor: '#3b82f6',
+                    borderWidth: 2,
+                    borderRadius: 4
+                }, {
+                    label: 'Target',
+                    data: [90, 80, 75, 95, 85],
+                    backgroundColor: 'rgba(16,185,129,0.3)',
+                    borderColor: '#10b981',
+                    borderWidth: 2,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: { color: '#9ca3af', font: { size: 11, family: "'Inter', sans-serif" } }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: { color: '#9ca3af' },
+                        grid: { color: 'rgba(156,163,175,0.1)' }
+                    },
+                    x: {
+                        ticks: { color: '#9ca3af' },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    },
+    
+    initTrendAnalysisChart() {
+        const ctx = document.getElementById('trendAnalysisChart');
+        if (!ctx) return;
+        
+        this.trendChart = new Chart(ctx.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Trend',
+                    data: [65, 72, 68, 85, 82, 91],
+                    borderColor: '#8b5cf6',
+                    backgroundColor: 'rgba(139,92,246,0.1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#8b5cf6'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: { color: '#9ca3af' },
+                        grid: { color: 'rgba(156,163,175,0.1)' }
+                    },
+                    x: {
+                        ticks: { color: '#9ca3af' },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    },
+    
+    addKPI() {
+        const name = document.getElementById('kpi-name').value;
+        const value = parseFloat(document.getElementById('kpi-value').value);
+        const target = document.getElementById('kpi-target').value;
+        
+        if (!name || isNaN(value)) {
+            NotificationSystem.error('Please enter valid KPI name and value');
+            return;
+        }
+        
+        this.kpis.push({
+            id: Date.now(),
+            name,
+            value,
+            target,
+            createdAt: new Date().toISOString()
+        });
+        
+        document.getElementById('kpi-name').value = '';
+        document.getElementById('kpi-value').value = '';
+        
+        this.renderKPIList();
+        this.updateMetrics();
+        NotificationSystem.success('KPI added successfully');
+    },
+    
+    renderKPIList() {
+        const list = document.getElementById('kpi-list');
+        if (!list) return;
+        
+        if (this.kpis.length === 0) {
+            list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted)">No custom KPIs added yet</div>';
+            return;
+        }
+        
+        list.innerHTML = this.kpis.map(kpi => `
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid var(--border);margin-bottom:8px">
+                <div>
+                    <div style="font-weight:600;color:var(--text);font-size:0.85rem">${kpi.name}</div>
+                    <div style="color:var(--muted);font-size:0.75rem">Target: ${kpi.target}</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px">
+                    <span style="font-weight:600;color:var(--accent);font-size:0.9rem">${kpi.value}</span>
+                    <button onclick="DataAnalytics.deleteKPI(${kpi.id})" style="background:rgba(239,68,68,0.1);border:1px solid var(--red);color:var(--red);padding:4px 8px;border-radius:4px;cursor:pointer;font-size:0.75rem;font-weight:500">Delete</button>
+                </div>
+            </div>
+        `).join('');
+    },
+    
+    deleteKPI(id) {
+        this.kpis = this.kpis.filter(kpi => kpi.id !== id);
+        this.renderKPIList();
+        this.updateMetrics();
+        NotificationSystem.info('KPI deleted');
+    },
+    
+    exportCSV() {
+        const csvContent = "data:text/csv;charset=utf-8," 
+            + "Name,Value,Target,Created At\n"
+            + this.kpis.map(kpi => `${kpi.name},${kpi.value},${kpi.target},${kpi.createdAt}`).join("\n");
+        
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "kpi_data.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        this.dataPoints += this.kpis.length;
+        NotificationSystem.success('CSV exported successfully');
+    },
+    
+    exportPDF() {
+        const reportName = `Analytics_Report_${new Date().toISOString().split('T')[0]}.pdf`;
+        this.reports.push({
+            id: Date.now(),
+            name: reportName,
+            type: 'PDF',
+            createdAt: new Date().toISOString()
+        });
+        
+        this.renderReportsList();
+        this.updateMetrics();
+        NotificationSystem.success('PDF exported successfully');
+    },
+    
+    generateReport() {
+        const reportName = `Analytics_Report_${new Date().toISOString().split('T')[0]}`;
+        this.reports.push({
+            id: Date.now(),
+            name: reportName,
+            type: 'Report',
+            createdAt: new Date().toISOString()
+        });
+        
+        this.renderReportsList();
+        this.updateMetrics();
+        NotificationSystem.success('Report generated successfully');
+    },
+    
+    renderReportsList() {
+        const list = document.getElementById('reports-list');
+        if (!list) return;
+        
+        if (this.reports.length === 0) {
+            list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted)">No reports generated yet</div>';
+            return;
+        }
+        
+        list.innerHTML = this.reports.slice(-5).reverse().map(report => `
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;border-bottom:1px solid var(--border);margin-bottom:8px">
+                <div>
+                    <div style="font-weight:600;color:var(--text);font-size:0.85rem">${report.name}</div>
+                    <div style="color:var(--muted);font-size:0.75rem">${report.type}</div>
+                </div>
+                <span style="color:var(--muted);font-size:0.75rem">${new Date(report.createdAt).toLocaleDateString()}</span>
+            </div>
+        `).join('');
+    },
+    
+    updateMetrics() {
+        document.getElementById('analytics-total-kpis').textContent = this.kpis.length + 5;
+        document.getElementById('analytics-dashboards').textContent = 3;
+        document.getElementById('analytics-datapoints').textContent = (this.dataPoints + 15000).toLocaleString();
+        document.getElementById('analytics-reports').textContent = this.reports.length;
+    }
+};
+
+// ════════════════════════════════════════════
+// PORTFOLIO MANAGEMENT MODULE
+// ════════════════════════════════════════════
+const PortfolioManager = {
+    holdings: [],
+    totalValue: 0,
+    pnl: 0,
+    
+    init() {
+        this.initAllocationChart();
+        this.initPerformanceChart();
+        this.updateMetrics();
+        this.renderHoldings();
+        setInterval(() => this.updateMetrics(), 5000);
+    },
+    
+    initAllocationChart() {
+        const ctx = document.getElementById('portfolioAllocationChart');
+        if (!ctx) return;
+        
+        this.allocationChart = new Chart(ctx.getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Stocks', 'Crypto', 'Bonds', 'Cash', 'Real Estate'],
+                datasets: [{
+                    data: [40, 25, 20, 10, 5],
+                    backgroundColor: [
+                        'rgba(59,130,246,0.8)',
+                        'rgba(16,185,129,0.8)',
+                        'rgba(245,158,11,0.8)',
+                        'rgba(139,92,246,0.8)',
+                        'rgba(239,68,68,0.8)'
+                    ],
+                    borderColor: [
+                        '#3b82f6',
+                        '#10b981',
+                        '#f59e0b',
+                        '#8b5cf6',
+                        '#ef4444'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { color: '#9ca3af', font: { size: 11, family: "'Inter', sans-serif" } }
+                    }
+                }
+            }
+        });
+    },
+    
+    initPerformanceChart() {
+        const ctx = document.getElementById('portfolioPerformanceChart');
+        if (!ctx) return;
+        
+        this.performanceChart = new Chart(ctx.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Portfolio Value',
+                    data: [100000, 105000, 102000, 115000, 120000, 125000],
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59,130,246,0.1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#3b82f6'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        ticks: { 
+                            color: '#9ca3af',
+                            callback: function(value) {
+                                return '$' + value.toLocaleString();
+                            }
+                        },
+                        grid: { color: 'rgba(156,163,175,0.1)' }
+                    },
+                    x: {
+                        ticks: { color: '#9ca3af' },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    },
+    
+    addAsset() {
+        const symbol = document.getElementById('asset-symbol').value.toUpperCase();
+        const quantity = parseFloat(document.getElementById('asset-quantity').value);
+        const price = parseFloat(document.getElementById('asset-price').value);
+        
+        if (!symbol || isNaN(quantity) || isNaN(price)) {
+            NotificationSystem.error('Please enter valid asset details');
+            return;
+        }
+        
+        const existingAsset = this.holdings.find(h => h.symbol === symbol);
+        if (existingAsset) {
+            existingAsset.quantity += quantity;
+            existingAsset.avgPrice = ((existingAsset.avgPrice * (existingAsset.quantity - quantity)) + (price * quantity)) / existingAsset.quantity;
+        } else {
+            this.holdings.push({
+                id: Date.now(),
+                symbol,
+                quantity,
+                avgPrice: price,
+                currentPrice: price
+            });
+        }
+        
+        // Clear inputs
+        document.getElementById('asset-symbol').value = '';
+        document.getElementById('asset-quantity').value = '';
+        document.getElementById('asset-price').value = '';
+        
+        this.renderHoldings();
+        this.updateMetrics();
+        NotificationSystem.success(`${symbol} added to portfolio`);
+    },
+    
+    removeAsset(id) {
+        this.holdings = this.holdings.filter(h => h.id !== id);
+        this.renderHoldings();
+        this.updateMetrics();
+        NotificationSystem.info('Asset removed from portfolio');
+    },
+    
+    renderHoldings() {
+        const list = document.getElementById('portfolio-holdings');
+        if (!list) return;
+        
+        if (this.holdings.length === 0) {
+            list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted)">No assets in portfolio</div>';
+            return;
+        }
+        
+        list.innerHTML = this.holdings.map(holding => {
+            const currentValue = holding.quantity * holding.currentPrice;
+            const pnl = currentValue - (holding.quantity * holding.avgPrice);
+            const pnlPercent = ((pnl / (holding.quantity * holding.avgPrice)) * 100).toFixed(2);
+            const pnlColor = pnl >= 0 ? 'var(--green)' : 'var(--red)';
+            
+            return `
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid var(--border);margin-bottom:8px">
+                <div>
+                    <div style="font-weight:600;color:var(--text);font-size:0.85rem">${holding.symbol}</div>
+                    <div style="color:var(--muted);font-size:0.75rem">${holding.quantity} @ $${holding.avgPrice.toFixed(2)}</div>
+                </div>
+                <div style="text-align:right">
+                    <div style="font-weight:600;color:var(--text);font-size:0.85rem">$${currentValue.toLocaleString()}</div>
+                    <div style="color:${pnlColor};font-size:0.75rem">${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)} (${pnlPercent}%)</div>
+                </div>
+                <button onclick="PortfolioManager.removeAsset(${holding.id})" style="background:rgba(239,68,68,0.1);border:1px solid var(--red);color:var(--red);padding:4px 8px;border-radius:4px;cursor:pointer;font-size:0.75rem;font-weight:500;margin-left:12px">Remove</button>
+            </div>
+        `}).join('');
+    },
+    
+    updateMetrics() {
+        // Simulate price changes
+        this.holdings.forEach(holding => {
+            holding.currentPrice = holding.avgPrice * (1 + (Math.random() - 0.5) * 0.02);
+        });
+        
+        // Calculate total value
+        this.totalValue = this.holdings.reduce((sum, h) => sum + (h.quantity * h.currentPrice), 0);
+        
+        // Calculate P&L
+        this.pnl = this.holdings.reduce((sum, h) => sum + (h.quantity * (h.currentPrice - h.avgPrice)), 0);
+        
+        document.getElementById('portfolio-total').textContent = '$' + this.totalValue.toLocaleString();
+        document.getElementById('portfolio-pnl').textContent = (this.pnl >= 0 ? '+' : '') + '$' + this.pnl.toFixed(2);
+        document.getElementById('portfolio-pnl').style.color = this.pnl >= 0 ? 'var(--green)' : 'var(--red)';
+        document.getElementById('portfolio-assets').textContent = this.holdings.length;
+        
+        // Update risk score
+        const riskScore = this.calculateRiskScore();
+        document.getElementById('portfolio-risk').textContent = riskScore;
+        
+        this.renderHoldings();
+    },
+    
+    calculateRiskScore() {
+        if (this.holdings.length === 0) return 'Low';
+        
+        const volatility = this.holdings.length > 5 ? 'High' : this.holdings.length > 3 ? 'Medium' : 'Low';
+        return volatility;
+    }
+};
+
+// ════════════════════════════════════════════
+// MARKET INTELLIGENCE MODULE
+// ════════════════════════════════════════════
+const MarketIntelligence = {
+    sentimentData: [],
+    intelligenceFeed: [],
+    
+    init() {
+        this.initSentimentChart();
+        this.renderCorrelationHeatmap();
+        this.renderEconomicCalendar();
+        this.updateMetrics();
+        this.renderIntelligenceFeed();
+        setInterval(() => this.updateMetrics(), 4000);
+        setInterval(() => this.renderIntelligenceFeed(), 8000);
+    },
+    
+    initSentimentChart() {
+        const ctx = document.getElementById('sentimentChart');
+        if (!ctx) return;
+        
+        this.sentimentChart = new Chart(ctx.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Sentiment',
+                    data: [65, 72, 68, 85, 82, 75, 78],
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59,130,246,0.1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#3b82f6'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: { color: '#9ca3af' },
+                        grid: { color: 'rgba(156,163,175,0.1)' }
+                    },
+                    x: {
+                        ticks: { color: '#9ca3af' },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    },
+    
+    renderCorrelationHeatmap() {
+        const heatmap = document.getElementById('correlation-heatmap');
+        if (!heatmap) return;
+        
+        const assets = ['BTC', 'ETH', 'SOL', 'ADA', 'DOT', 'AVAX', 'LINK', 'MATIC'];
+        const correlations = [];
+        
+        for (let i = 0; i < assets.length; i++) {
+            for (let j = 0; j < assets.length; j++) {
+                const correlation = i === j ? 1 : (Math.random() * 2 - 1).toFixed(2);
+                const intensity = Math.abs(correlation);
+                const color = correlation > 0 
+                    ? `rgba(16,185,129,${intensity})` 
+                    : `rgba(239,68,68,${intensity})`;
+                
+                correlations.push(`
+                    <div style="background:${color};padding:8px;text-align:center;font-size:0.7rem;color:#fff;border-radius:2px">
+                        ${correlation}
+                    </div>
+                `);
+            }
+        }
+        
+        heatmap.innerHTML = correlations.join('');
+    },
+    
+    renderEconomicCalendar() {
+        const calendar = document.getElementById('economic-calendar');
+        if (!calendar) return;
+        
+        const events = [
+            { date: '2024-06-01', event: 'Fed Interest Rate Decision', impact: 'High', actual: '5.25%', forecast: '5.25%' },
+            { date: '2024-06-03', event: 'Non-Farm Payrolls', impact: 'High', actual: '250K', forecast: '200K' },
+            { date: '2024-06-05', event: 'CPI Data Release', impact: 'High', actual: '3.2%', forecast: '3.4%' },
+            { date: '2024-06-08', event: 'ECB Meeting', impact: 'Medium', actual: '4.00%', forecast: '4.00%' },
+            { date: '2024-06-12', event: 'Retail Sales', impact: 'Medium', actual: '0.5%', forecast: '0.3%' }
+        ];
+        
+        calendar.innerHTML = events.map(event => `
+            <tr>
+                <td>${event.date}</td>
+                <td>${event.event}</td>
+                <td><span style="color:${event.impact === 'High' ? 'var(--red)' : 'var(--orange)'}">${event.impact}</span></td>
+                <td>${event.actual}</td>
+                <td>${event.forecast}</td>
+            </tr>
+        `).join('');
+    },
+    
+    renderIntelligenceFeed() {
+        const feed = document.getElementById('intel-feed');
+        if (!feed) return;
+        
+        const intelligence = [
+            { type: 'Bullish', message: 'Institutional accumulation detected in BTC', time: '2 min ago' },
+            { type: 'Bearish', message: 'Large sell order on ETH spotted', time: '5 min ago' },
+            { type: 'Neutral', message: 'Market consolidation phase expected', time: '12 min ago' },
+            { type: 'Bullish', message: 'DeFi TVL reaching new highs', time: '18 min ago' },
+            { type: 'Neutral', message: 'Regulatory clarity improving in EU', time: '25 min ago' }
+        ];
+        
+        feed.innerHTML = intelligence.map(item => {
+            const color = item.type === 'Bullish' ? 'var(--green)' : item.type === 'Bearish' ? 'var(--red)' : 'var(--orange)';
+            return `
+            <div style="padding:12px;border-bottom:1px solid var(--border);margin-bottom:8px">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+                    <span style="color:${color};font-weight:600;font-size:0.8rem">${item.type}</span>
+                    <span style="color:var(--muted);font-size:0.75rem">${item.time}</span>
+                </div>
+                <div style="color:var(--text);font-size:0.85rem">${item.message}</div>
+            </div>
+        `}).join('');
+    },
+    
+    updateMetrics() {
+        document.getElementById('intel-sentiment').textContent = Math.floor(60 + Math.random() * 30);
+        document.getElementById('intel-news').textContent = (1000 + Math.floor(Math.random() * 500)).toLocaleString();
+        
+        const socialLevels = ['Low', 'Medium', 'High'];
+        document.getElementById('intel-social').textContent = socialLevels[Math.floor(Math.random() * 3)];
+        
+        document.getElementById('intel-signals').textContent = Math.floor(Math.random() * 5);
+    }
+};
+
+// ════════════════════════════════════════════
 // WEATHER MODULE
 // ════════════════════════════════════════════
 const WeatherModule = {
@@ -5480,6 +6248,73 @@ function initAllCharts(){
 }
  
 // ════════════════════════════════════════════
+// THEME SWITCHER
+// ════════════════════════════════════════════
+function toggleTheme() {
+    const html = document.documentElement;
+    const currentTheme = html.getAttribute('data-theme');
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    
+    // Update theme icon and text
+    const themeIcon = document.getElementById('theme-icon');
+    const themeText = document.getElementById('theme-text');
+    
+    if (newTheme === 'light') {
+        themeIcon.innerHTML = '<path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/>';
+        themeText.textContent = 'Light';
+    } else {
+        themeIcon.innerHTML = '<path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/>';
+        themeText.textContent = 'Dark';
+    }
+    
+    // Update chart colors for theme
+    updateChartsTheme(newTheme);
+}
+
+function updateChartsTheme(theme) {
+    const textColor = theme === 'light' ? '#111827' : '#f3f4f6';
+    const mutedColor = theme === 'light' ? '#6b7280' : '#9ca3af';
+    
+    // Update all chart instances
+    Object.values(charts).forEach(chart => {
+        if (chart && chart.options) {
+            if (chart.options.plugins && chart.options.plugins.legend) {
+                chart.options.plugins.legend.labels.color = mutedColor;
+            }
+            if (chart.options.scales) {
+                if (chart.options.scales.y && chart.options.scales.y.ticks) {
+                    chart.options.scales.y.ticks.color = mutedColor;
+                }
+                if (chart.options.scales.x && chart.options.scales.x.ticks) {
+                    chart.options.scales.x.ticks.color = mutedColor;
+                }
+            }
+            chart.update();
+        }
+    });
+}
+
+// Initialize theme on load
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    
+    const themeIcon = document.getElementById('theme-icon');
+    const themeText = document.getElementById('theme-text');
+    
+    if (savedTheme === 'light') {
+        themeIcon.innerHTML = '<path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/>';
+        themeText.textContent = 'Light';
+    } else {
+        themeIcon.innerHTML = '<path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/>';
+        themeText.textContent = 'Dark';
+    }
+}
+
+// ════════════════════════════════════════════
 // INTERVALS
 // ════════════════════════════════════════════
 function startIntervals(){
@@ -5532,6 +6367,9 @@ MLTraining.init();
 NetworkIntel.init();
 Blockchain.init();
 QuantumSim.init();
+DataAnalytics.init();
+PortfolioManager.init();
+MarketIntelligence.init();
 
 sysLog("All modules initialized successfully","SUCCESS");
 NotificationSystem.success("Quantum Telemetry Core v2.0 Online");
