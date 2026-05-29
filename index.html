@@ -338,6 +338,188 @@
         .terminal-prompt { color: var(--accent); font-weight: 700; text-shadow: 0 0 6px var(--ga); font-size: 0.8rem; }
         .terminal-input { flex-grow: 1; background: transparent; border: none; color: var(--text); font-family: inherit; font-size: inherit; outline: none; caret-color: var(--accent); }
  
+        /* ─── GAUGE CHARTS ─── */
+        .gauge-container {
+            position: relative;
+            width: 120px;
+            height: 60px;
+            margin: 0 auto;
+        }
+        .gauge-bg {
+            position: absolute;
+            width: 120px;
+            height: 60px;
+            border-radius: 120px 120px 0 0;
+            background: rgba(13,58,86,0.3);
+            overflow: hidden;
+        }
+        .gauge-fill {
+            position: absolute;
+            width: 120px;
+            height: 60px;
+            border-radius: 120px 120px 0 0;
+            background: linear-gradient(90deg, var(--accent), var(--green));
+            transform-origin: center bottom;
+            transition: transform 0.5s ease-out;
+            transform: rotate(-180deg);
+        }
+        .gauge-value {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-shadow: 0 0 10px var(--ga);
+        }
+        
+        /* ─── PROGRESS BARS ─── */
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(13,58,86,0.5);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--green));
+            border-radius: 4px;
+            transition: width 0.3s ease-out;
+            box-shadow: 0 0 10px var(--ga);
+        }
+        .progress-bar-fill.warning {
+            background: linear-gradient(90deg, var(--orange), var(--red));
+            box-shadow: 0 0 10px var(--go);
+        }
+        
+        /* ─── HEATMAP ─── */
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+        .heatmap-cell {
+            aspect-ratio: 1;
+            border-radius: 3px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        .heatmap-cell:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(0,229,255,0.5);
+        }
+        
+        /* ─── NOTIFICATION TOAST ─── */
+        .notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .notification {
+            background: rgba(3,13,24,0.95);
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            padding: 15px 20px;
+            min-width: 300px;
+            backdrop-filter: blur(10px);
+            animation: slideIn 0.3s ease-out;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        .notification.success { border-left: 3px solid var(--green); }
+        .notification.warning { border-left: 3px solid var(--orange); }
+        .notification.error { border-left: 3px solid var(--red); }
+        .notification.info { border-left: 3px solid var(--accent); }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        
+        /* ─── THEME TOGGLE ─── */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(3,13,24,0.9);
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            padding: 8px 12px;
+            cursor: pointer;
+            z-index: 1000;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--accent);
+            transition: all 0.2s;
+        }
+        .theme-toggle:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 10px var(--ga);
+        }
+        
+        /* ─── NEWS ITEM HOVER ─── */
+        .news-item:hover { background: rgba(0,229,255,0.05); cursor: pointer; }
+        
+        /* ─── RESPONSIVE IMPROVEMENTS ─── */
+        @media (max-width: 768px) {
+            .navigation { flex-wrap: wrap; }
+            .tab-btn { font-size: 0.7rem; padding: 6px 12px; }
+            .grid-4 { grid-template-columns: repeat(2, 1fr); }
+            .header-container { flex-direction: column; gap: 10px; }
+            .live-tag { align-self: flex-start; }
+        }
+        @media (max-width: 480px) {
+            .grid-4 { grid-template-columns: 1fr; }
+            .grid-split, .grid-asymmetric { grid-template-columns: 1fr; }
+        }
+        
+        /* ─── KEYBOARD SHORTCUT HINT ─── */
+        .kbd-hint {
+            position: fixed;
+            bottom: 170px;
+            right: 20px;
+            background: rgba(0,8,18,0.9);
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            padding: 10px 15px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--muted);
+            z-index: 1000;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        .kbd-hint:hover { opacity: 1; }
+        .kbd-hint kbd {
+            background: rgba(0,229,255,0.1);
+            border: 1px solid rgba(0,229,255,0.3);
+            border-radius: 3px;
+            padding: 2px 6px;
+            color: var(--accent);
+        }
+        
+        /* ─── LOADING SPINNER ─── */
+        .loading-spinner {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid rgba(0,229,255,0.3);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
         /* ─── SCROLLBAR ─── */
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
@@ -356,6 +538,12 @@
 </head>
 <body>
  
+    <!-- Theme toggle button -->
+    <button class="theme-toggle" onclick="toggleTheme()">🌙 THEME</button>
+    
+    <!-- Notification container -->
+    <div class="notification-container" id="notification-container"></div>
+    
     <div class="header-container">
         <h1>⬡ QUANTUM TELEMETRY CORE</h1>
         <div class="live-tag">NODE: OSLO_CLUSTER_04 &nbsp;// &nbsp;LIVE</div>
@@ -364,6 +552,10 @@
     <div class="navigation">
         <button class="tab-btn active" onclick="switchTab('ai-tab',this)">🤖 AI COMPUTE</button>
         <button class="tab-btn" onclick="switchTab('finans-tab',this)">📈 FINANS & MARKETS</button>
+        <button class="tab-btn" onclick="switchTab('security-tab',this)">🛡️ CYBER SECURITY</button>
+        <button class="tab-btn" onclick="switchTab('weather-tab',this)">🌤️ WEATHER & CLIMATE</button>
+        <button class="tab-btn" onclick="switchTab('news-tab',this)">📰 TECH NEWS</button>
+        <button class="tab-btn" onclick="switchTab('system-tab',this)">⚙️ SYSTEM MONITOR</button>
         <button class="tab-btn norway-btn" onclick="switchTab('norge-tab',this)">🇳🇴 REGIO NORGE</button>
     </div>
  
@@ -446,6 +638,16 @@
         <div class="grid-asymmetric">
             <div class="card">
                 <h2>Cross-Asset Market Terminal</h2>
+                <div style="margin-bottom:12px;display:flex;gap:8px">
+                    <input type="text" id="market-search" placeholder="Search assets..." oninput="filterMarket()" style="flex:1;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:0.75rem;outline:none">
+                    <select id="market-filter" onchange="filterMarket()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:6px;border-radius:3px;font-size:0.75rem">
+                        <option value="all">All Types</option>
+                        <option value="Crypto">Crypto</option>
+                        <option value="Equity">Equity</option>
+                        <option value="FX">FX</option>
+                        <option value="Commodity">Commodity</option>
+                    </select>
+                </div>
                 <table>
                     <thead><tr>
                         <th>Ticker</th><th>Asset</th><th>Type</th>
@@ -498,6 +700,14 @@
                 <div class="chart-wrap" style="height:145px;margin-bottom:14px"><canvas id="mktAssetChart"></canvas><div class="chart-glow-overlay"></div></div>
                 <h2>Intelligence & Rating</h2>
                 <div class="info-panel" id="focus-info">Laster etterretningsdata...</div>
+                <div class="info-panel" id="prediction-info" style="margin-top:10px;display:none">
+                    <h3 style="color:var(--accent);margin-bottom:8px">📊 AI Prediction</h3>
+                    <div id="prediction-content"></div>
+                </div>
+                <div style="margin-top:14px;display:flex;gap:8px">
+                    <button onclick="runPrediction()" style="flex:1;background:rgba(0,229,255,0.1);border:1px solid var(--accent);color:var(--accent);padding:8px;border-radius:3px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:0.7rem;font-weight:700">🔮 PREDICT</button>
+                    <button onclick="DataExport.exportMarketData()" style="flex:1;background:rgba(0,255,136,0.1);border:1px solid var(--green);color:var(--green);padding:8px;border-radius:3px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:0.7rem;font-weight:700">📥 EXPORT</button>
+                </div>
                 <h2 style="margin-top:18px">Global Traffic Globe (3D)</h2>
                 <div id="globe3d-container" style="width:100%;height:270px;background:rgba(0,0,0,0.5);border:1px solid var(--border);border-radius:5px;overflow:hidden;position:relative">
                     <div style="position:absolute;top:7px;left:8px;font-size:0.58rem;color:var(--muted);font-family:'JetBrains Mono',monospace;pointer-events:none;z-index:10;letter-spacing:0.06em">DRAG TO ROTATE // SCROLL TO ZOOM</div>
@@ -506,6 +716,181 @@
         </div>
     </div>
  
+    <!-- ══════════════ CYBER SECURITY ══════════════ -->
+    <div id="security-tab" class="tab-content">
+        <div class="grid-4">
+            <div class="metric-box" style="border-left:2px solid var(--red)"><h3>Active Threats</h3><div class="metric-val" id="sec-threats" style="color:var(--red);text-shadow:0 0 12px var(--gr)">0</div></div>
+            <div class="metric-box"><h3>Firewall Status</h3><div class="metric-val" id="sec-firewall" style="color:var(--green);text-shadow:0 0 12px var(--gg)">ACTIVE</div></div>
+            <div class="metric-box"><h3>Blocked Attacks</h3><div class="metric-val" id="sec-blocked" style="color:var(--orange);text-shadow:0 0 12px var(--go)">0</div></div>
+            <div class="metric-box">
+                <h3>Security Score</h3>
+                <div class="gauge-container">
+                    <div class="gauge-bg"></div>
+                    <div class="gauge-fill" id="sec-score-gauge"></div>
+                    <div class="gauge-value" id="sec-score">98%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-asymmetric">
+            <div class="card">
+                <h2>Global Threat Map (Live)</h2>
+                <canvas id="threatMapCanvas" style="width:100%;height:280px;background:rgba(0,3,8,0.7);border-radius:5px;border:1px solid var(--border);display:block"></canvas>
+            </div>
+            <div class="card">
+                <h2>Threat Intelligence</h2>
+                <div class="ctrl-group">
+                    <div class="ctrl-row">
+                        <span class="ctrl-label">Shield Level:</span>
+                        <input type="range" id="sec-shield" class="sim-slider" min="1" max="10" value="8" oninput="updateSecurityLevel()">
+                    </div>
+                    <div class="ctrl-row">
+                        <span class="ctrl-label">AI Detection:</span>
+                        <select id="sec-ai" class="fx-select" onchange="logSecurityChange()">
+                            <option value="active">Active</option>
+                            <option value="passive">Passive</option>
+                            <option value="off">Off</option>
+                        </select>
+                    </div>
+                </div>
+                <hr class="sep">
+                <h2>Recent Incidents</h2>
+                <div id="security-logs" style="max-height:200px;overflow-y:auto;font-family:'JetBrains Mono',monospace;font-size:0.7rem"></div>
+                <div style="margin-top:14px">
+                    <button onclick="DataExport.exportSecurityLogs()" style="width:100%;background:rgba(0,229,255,0.1);border:1px solid var(--accent);color:var(--accent);padding:8px;border-radius:3px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:0.7rem;font-weight:700">📥 EXPORT LOGS</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-split">
+            <div class="card">
+                <h2>Attack Types Distribution</h2>
+                <div class="chart-wrap" style="height:220px"><canvas id="secAttackChart"></canvas><div class="chart-glow-overlay"></div></div>
+            </div>
+            <div class="card">
+                <h2>Threat Timeline (24h)</h2>
+                <div class="chart-wrap" style="height:220px"><canvas id="secTimelineChart"></canvas><div class="chart-glow-overlay"></div></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Attack Heatmap (Last 7 Days)</h2>
+            <div class="heatmap-grid" id="security-heatmap"></div>
+            <div style="display:flex;justify-content:space-between;margin-top:10px;font-size:0.7rem;color:var(--muted);font-family:'JetBrains Mono',monospace">
+                <span>Low Activity</span>
+                <span>High Activity</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════ WEATHER & CLIMATE ══════════════ -->
+    <div id="weather-tab" class="tab-content">
+        <div class="grid-4">
+            <div class="metric-box"><h3>Temperature</h3><div class="metric-val" id="weather-temp" style="color:var(--accent);text-shadow:0 0 12px var(--ga)">--°C</div></div>
+            <div class="metric-box"><h3>Humidity</h3><div class="metric-val" id="weather-humidity" style="color:var(--green);text-shadow:0 0 12px var(--gg)">--%</div></div>
+            <div class="metric-box"><h3>Wind Speed</h3><div class="metric-val" id="weather-wind" style="color:var(--orange);text-shadow:0 0 12px var(--go)">-- km/h</div></div>
+            <div class="metric-box"><h3>UV Index</h3><div class="metric-val" id="weather-uv" style="color:var(--purple);text-shadow:0 0 12px var(--gp)">--</div></div>
+        </div>
+
+        <div class="grid-asymmetric">
+            <div class="card">
+                <h2>Weather Forecast (7 Days)</h2>
+                <div class="chart-wrap" style="height:280px"><canvas id="weatherForecastChart"></canvas><div class="chart-glow-overlay"></div></div>
+            </div>
+            <div class="card">
+                <h2>Current Conditions</h2>
+                <div id="weather-details" class="info-panel">
+                    <div style="text-align:center;padding:20px">
+                        <div style="font-size:3rem;margin-bottom:10px" id="weather-icon">🌤️</div>
+                        <div style="font-size:1.5rem;font-weight:700;color:var(--accent)" id="weather-desc">Loading...</div>
+                        <div style="margin-top:15px;font-size:0.8rem;color:var(--muted)" id="weather-location">Oslo, Norway</div>
+                    </div>
+                </div>
+                <hr class="sep">
+                <h2>Climate Metrics</h2>
+                <div class="grid-4" style="margin-top:14px">
+                    <div class="metric-box"><h3>CO2 Level</h3><div class="metric-val" style="font-size:1rem;color:var(--red)">415 ppm</div></div>
+                    <div class="metric-box"><h3>Air Quality</h3><div class="metric-val" style="font-size:1rem;color:var(--green)">Good</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════ TECH NEWS ══════════════ -->
+    <div id="news-tab" class="tab-content">
+        <div class="grid-4">
+            <div class="metric-box"><h3>Total Articles</h3><div class="metric-val" id="news-total" style="color:var(--accent);text-shadow:0 0 12px var(--ga)">0</div></div>
+            <div class="metric-box"><h3>Updated</h3><div class="metric-val" id="news-updated" style="color:var(--green);text-shadow:0 0 12px var(--gg)">--:--</div></div>
+            <div class="metric-box"><h3>Sources</h3><div class="metric-val" style="color:var(--orange);text-shadow:0 0 12px var(--go)">5</div></div>
+            <div class="metric-box"><h3>Trending</h3><div class="metric-val" style="color:var(--purple);text-shadow:0 0 12px var(--gp)">AI</div></div>
+        </div>
+
+        <div class="card">
+            <h2>Latest Tech News</h2>
+            <div style="margin-bottom:12px">
+                <input type="text" id="news-search" placeholder="Search news..." oninput="filterNews()" style="width:100%;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:0.75rem;outline:none">
+            </div>
+            <div id="news-feed" style="max-height:500px;overflow-y:auto">
+                <div style="text-align:center;padding:40px;color:var(--muted)">Loading news feed...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════ SYSTEM MONITOR ══════════════ -->
+    <div id="system-tab" class="tab-content">
+        <div class="grid-4">
+            <div class="metric-box">
+                <h3>CPU Usage</h3>
+                <div class="metric-val" id="sys-cpu" style="color:var(--accent);text-shadow:0 0 12px var(--ga)">0%</div>
+                <div class="progress-bar-container" style="margin-top:10px">
+                    <div class="progress-bar-fill" id="sys-cpu-bar" style="width:0%"></div>
+                </div>
+            </div>
+            <div class="metric-box">
+                <h3>Memory</h3>
+                <div class="metric-val" id="sys-mem" style="color:var(--green);text-shadow:0 0 12px var(--gg)">0%</div>
+                <div class="progress-bar-container" style="margin-top:10px">
+                    <div class="progress-bar-fill" id="sys-mem-bar" style="width:0%"></div>
+                </div>
+            </div>
+            <div class="metric-box">
+                <h3>Network</h3>
+                <div class="metric-val" id="sys-net" style="color:var(--orange);text-shadow:0 0 12px var(--go)">0 Mbps</div>
+                <div class="progress-bar-container" style="margin-top:10px">
+                    <div class="progress-bar-fill" id="sys-net-bar" style="width:0%"></div>
+                </div>
+            </div>
+            <div class="metric-box">
+                <h3>Disk I/O</h3>
+                <div class="metric-val" id="sys-disk" style="color:var(--purple);text-shadow:0 0 12px var(--gp)">0 MB/s</div>
+                <div class="progress-bar-container" style="margin-top:10px">
+                    <div class="progress-bar-fill" id="sys-disk-bar" style="width:0%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-asymmetric">
+            <div class="card">
+                <h2>System Performance (Real-time)</h2>
+                <div class="chart-wrap" style="height:280px"><canvas id="sysPerformanceChart"></canvas><div class="chart-glow-overlay"></div></div>
+            </div>
+            <div class="card">
+                <h2>Process List</h2>
+                <table>
+                    <thead><tr><th>PID</th><th>Name</th><th>CPU</th><th>Memory</th></tr></thead>
+                    <tbody id="sys-processes"></tbody>
+                </table>
+                <hr class="sep">
+                <h2>System Info</h2>
+                <div class="info-panel">
+                    <div><strong>OS:</strong> <span id="sys-os">--</span></div>
+                    <div><strong>Uptime:</strong> <span id="sys-uptime">--</span></div>
+                    <div><strong>Load Avg:</strong> <span id="sys-load">--</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ══════════════ REGIO NORGE ══════════════ -->
     <div id="norge-tab" class="tab-content">
         <div class="grid-4">
@@ -543,11 +928,370 @@
             <input type="text" id="term-input" class="terminal-input" placeholder="/help, /ping, /clear, /rank, /status, /kill [node]..." onkeydown="handleTerminalInput(event)">
         </div>
     </div>
+
+    <!-- Keyboard shortcuts hint -->
+    <div class="kbd-hint">
+        <div><kbd>1</kbd>-<kbd>7</kbd> Switch tabs</div>
+        <div><kbd>Ctrl</kbd>+<kbd>`</kbd> Focus terminal</div>
+    </div>
  
 <script>
 // ════════════════════════════════════════════
+// NOTIFICATION SYSTEM
+// ════════════════════════════════════════════
+const NotificationSystem = {
+    container: null,
+    
+    init() {
+        this.container = document.getElementById('notification-container');
+    },
+    
+    show(message, type = 'info', duration = 4000) {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.innerHTML = `
+            <div style="font-weight:700;font-size:0.8rem;margin-bottom:5px;text-transform:uppercase">${type}</div>
+            <div style="font-size:0.85rem">${message}</div>
+        `;
+        
+        this.container.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease-out forwards';
+            setTimeout(() => notification.remove(), 300);
+        }, duration);
+    },
+    
+    success(message, duration) { this.show(message, 'success', duration); },
+    warning(message, duration) { this.show(message, 'warning', duration); },
+    error(message, duration) { this.show(message, 'error', duration); },
+    info(message, duration) { this.show(message, 'info', duration); }
+};
+
+// ════════════════════════════════════════════
+// DATA PERSISTENCE
+// ════════════════════════════════════════════
+const DataPersistence = {
+    keys: {
+        theme: 'quantum_theme',
+        preferences: 'quantum_preferences',
+        securityLogs: 'quantum_security_logs',
+        marketHistory: 'quantum_market_history'
+    },
+    
+    save(key, data) {
+        try {
+            localStorage.setItem(key, JSON.stringify(data));
+            return true;
+        } catch (e) {
+            console.error('Failed to save data:', e);
+            return false;
+        }
+    },
+    
+    load(key) {
+        try {
+            const data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : null;
+        } catch (e) {
+            console.error('Failed to load data:', e);
+            return null;
+        }
+    },
+    
+    saveSecurityLogs(logs) {
+        this.save(this.keys.securityLogs, logs.slice(0, 100)); // Keep last 100
+    },
+    
+    saveMarketHistory(asset) {
+        const history = this.load(this.keys.marketHistory) || {};
+        history[asset.id] = {
+            price: asset.price,
+            timestamp: Date.now()
+        };
+        this.save(this.keys.marketHistory, history);
+    }
+};
+
+// ════════════════════════════════════════════
+// PREDICTIVE ANALYTICS
+// ════════════════════════════════════════════
+const PredictiveAnalytics = {
+    // Simple linear regression for trend prediction
+    linearRegression(data) {
+        const n = data.length;
+        if (n < 2) return { slope: 0, intercept: 0, r2: 0 };
+        
+        let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0, sumY2 = 0;
+        
+        for (let i = 0; i < n; i++) {
+            sumX += i;
+            sumY += data[i];
+            sumXY += i * data[i];
+            sumX2 += i * i;
+            sumY2 += data[i] * data[i];
+        }
+        
+        const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+        const intercept = (sumY - slope * sumX) / n;
+        
+        // R-squared calculation
+        const meanY = sumY / n;
+        let ssTot = 0, ssRes = 0;
+        for (let i = 0; i < n; i++) {
+            ssTot += Math.pow(data[i] - meanY, 2);
+            ssRes += Math.pow(data[i] - (slope * i + intercept), 2);
+        }
+        const r2 = 1 - (ssRes / ssTot);
+        
+        return { slope, intercept, r2 };
+    },
+    
+    predictNext(data, periods = 1) {
+        const regression = this.linearRegression(data);
+        const lastValue = data[data.length - 1];
+        const predictions = [];
+        
+        for (let i = 1; i <= periods; i++) {
+            predictions.push(lastValue + regression.slope * i);
+        }
+        
+        return {
+            predictions,
+            trend: regression.slope > 0 ? 'BULLISH' : regression.slope < 0 ? 'BEARISH' : 'NEUTRAL',
+            confidence: Math.abs(regression.r2) * 100
+        };
+    },
+    
+    analyzeAsset(asset) {
+        const prediction = this.predictNext(asset.history, 3);
+        const currentPrice = asset.price;
+        const targetPrice = prediction.predictions[2];
+        const percentChange = ((targetPrice - currentPrice) / currentPrice) * 100;
+        
+        return {
+            ...prediction,
+            currentPrice,
+            targetPrice,
+            percentChange,
+            recommendation: percentChange > 5 ? 'STRONG BUY' : percentChange > 2 ? 'BUY' : percentChange < -5 ? 'SELL' : 'HOLD'
+        };
+    }
+};
+
+// ════════════════════════════════════════════
+// THEME MANAGER
+// ════════════════════════════════════════════
+const ThemeManager = {
+    currentTheme: 'dark',
+    
+    init() {
+        const saved = DataPersistence.load(DataPersistence.keys.theme);
+        if (saved) {
+            this.currentTheme = saved;
+            this.applyTheme();
+        }
+    },
+    
+    toggle() {
+        this.currentTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
+        this.applyTheme();
+        DataPersistence.save(DataPersistence.keys.theme, this.currentTheme);
+        NotificationSystem.info(`Theme switched to ${this.currentTheme}`);
+    },
+    
+    applyTheme() {
+        const btn = document.querySelector('.theme-toggle');
+        if (btn) {
+            btn.textContent = this.currentTheme === 'dark' ? '🌙 THEME' : '☀️ THEME';
+        }
+        
+        if (this.currentTheme === 'light') {
+            document.documentElement.style.setProperty('--bg', '#f0f4f8');
+            document.documentElement.style.setProperty('--bg-card', '#ffffff');
+            document.documentElement.style.setProperty('--text', '#1a202c');
+            document.documentElement.style.setProperty('--muted', '#4a5568');
+        } else {
+            document.documentElement.style.setProperty('--bg', '#020810');
+            document.documentElement.style.setProperty('--bg-card', '#030d18');
+            document.documentElement.style.setProperty('--text', '#ddeeff');
+            document.documentElement.style.setProperty('--muted', '#304a60');
+        }
+    }
+};
+
+function toggleTheme() {
+    ThemeManager.toggle();
+}
+
+// ════════════════════════════════════════════
+// USER PREFERENCES
+// ════════════════════════════════════════════
+const UserPreferences = {
+    defaults: {
+        theme: 'dark',
+        defaultTab: 'ai-tab',
+        refreshInterval: 250,
+        notificationsEnabled: true,
+        autoSave: true
+    },
+    
+    preferences: {},
+    
+    init() {
+        const saved = DataPersistence.load(DataPersistence.keys.preferences);
+        this.preferences = saved ? { ...this.defaults, ...saved } : { ...this.defaults };
+        this.applyPreferences();
+    },
+    
+    save() {
+        DataPersistence.save(DataPersistence.keys.preferences, this.preferences);
+    },
+    
+    set(key, value) {
+        this.preferences[key] = value;
+        this.save();
+        this.applyPreferences();
+    },
+    
+    get(key) {
+        return this.preferences[key];
+    },
+    
+    applyPreferences() {
+        // Theme is handled by ThemeManager
+        // Other preferences can be applied here
+        if (this.preferences.notificationsEnabled) {
+            // Notifications are enabled by default
+        }
+    },
+    
+    reset() {
+        this.preferences = { ...this.defaults };
+        this.save();
+        this.applyPreferences();
+        NotificationSystem.info('Preferences reset to defaults');
+    }
+};
+
+// ════════════════════════════════════════════
+// DATA EXPORT
+// ════════════════════════════════════════════
+const DataExport = {
+    exportToCSV(data, filename) {
+        const headers = Object.keys(data[0]).join(',');
+        const rows = data.map(row => Object.values(row).join(','));
+        const csv = [headers, ...rows].join('\n');
+        
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+        
+        NotificationSystem.success(`Exported ${filename}`);
+    },
+    
+    exportToJSON(data, filename) {
+        const json = JSON.stringify(data, null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+        
+        NotificationSystem.success(`Exported ${filename}`);
+    },
+    
+    exportMarketData() {
+        const data = MarketTerminal.assets.map(a => ({
+            id: a.id,
+            name: a.name,
+            type: a.type,
+            price: a.price,
+            change: a.chg,
+            rating: a.rating
+        }));
+        this.exportToCSV(data, 'market_data.csv');
+    },
+    
+    exportSecurityLogs() {
+        const data = SecurityModule.incidents;
+        this.exportToJSON(data, 'security_logs.json');
+    }
+};
+
+// ════════════════════════════════════════════
+// API FETCHING MODULE
+// ════════════════════════════════════════════
+const APIModule = {
+    async fetchCryptoPrices() {
+        try {
+            const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd&include_24hr_change=true');
+            if (response.ok) {
+                const data = await response.json();
+                if (data.bitcoin) {
+                    const btc = MarketTerminal.assets.find(a => a.id === 'BTC');
+                    if (btc) {
+                        btc.price = data.bitcoin.usd;
+                        btc.chg = data.bitcoin.usd_24h_change || btc.chg;
+                    }
+                }
+                if (data.ethereum) {
+                    const eth = MarketTerminal.assets.find(a => a.id === 'ETH');
+                    if (eth) {
+                        eth.price = data.ethereum.usd;
+                        eth.chg = data.ethereum.usd_24h_change || eth.chg;
+                    }
+                }
+                sysLog('Crypto prices updated from API', 'SUCCESS');
+            }
+        } catch (error) {
+            sysLog('API fetch failed, using simulated data', 'WARN');
+        }
+    },
+    
+    async fetchWeather() {
+        try {
+            // Note: This requires an API key from openweathermap.org
+            // For demo purposes, we'll use simulated data
+            // To use real data, uncomment and add your API key:
+            /*
+            const response = await fetch(`${API_CONFIG.weather}?q=Oslo,no&appid=YOUR_API_KEY&units=metric`);
+            if (response.ok) {
+                const data = await response.json();
+                WeatherModule.data.temp = data.main.temp;
+                WeatherModule.data.humidity = data.main.humidity;
+                WeatherModule.data.wind = data.wind.speed;
+                WeatherModule.data.condition = data.weather[0].description;
+                WeatherModule.updateDisplay();
+            }
+            */
+        } catch (error) {
+            sysLog('Weather API unavailable, using simulated data', 'WARN');
+        }
+    },
+    
+    init() {
+        // Try to fetch real crypto prices every 60 seconds
+        setInterval(() => this.fetchCryptoPrices(), 60000);
+        this.fetchCryptoPrices();
+    }
+};
+
+// ════════════════════════════════════════════
 // DATA
 // ════════════════════════════════════════════
+const API_CONFIG = {
+    crypto: 'https://api.coingecko.com/api/v3/simple/price',
+    weather: 'https://api.openweathermap.org/data/2.5/weather',
+    news: 'https://newsapi.org/v2/top-headlines'
+};
+
 const AI_PLATFORMS = [
     { rangering:1, navn:"ChatGPT",           kategori:"Generell AI",       aktive_brukere:245000 },
     { rangering:2, navn:"Google Gemini",      kategori:"Søk & Multimodal",  aktive_brukere:89000  },
@@ -559,6 +1303,421 @@ const AI_PLATFORMS = [
 let charts = {};
 let currentSelectedAsset = "BTC";
 const Indices = { sp500:5310.20, nasdaq:18440.50 };
+
+// ════════════════════════════════════════════
+// SECURITY MODULE
+// ════════════════════════════════════════════
+const SecurityModule = {
+    threats: 0,
+    blocked: 0,
+    score: 98,
+    incidents: [],
+    attackTypes: ['DDoS', 'Phishing', 'Malware', 'SQL Injection', 'XSS', 'Brute Force'],
+    locations: [
+        {x: 120, y: 80, name: 'North America'},
+        {x: 280, y: 100, name: 'Europe'},
+        {x: 380, y: 150, name: 'Asia'},
+        {x: 200, y: 200, name: 'South America'},
+        {x: 350, y: 220, name: 'Australia'}
+    ],
+    activeAttacks: [],
+    
+    init() {
+        this.updateMetrics();
+        setInterval(() => this.simulateAttack(), 3000);
+        setInterval(() => this.updateMetrics(), 1000);
+        this.initThreatMap();
+        this.initHeatmap();
+    },
+    
+    updateMetrics() {
+        document.getElementById('sec-threats').textContent = this.threats;
+        document.getElementById('sec-blocked').textContent = this.blocked.toLocaleString();
+        document.getElementById('sec-score').textContent = this.score + '%';
+        
+        // Update gauge
+        const gauge = document.getElementById('sec-score-gauge');
+        if (gauge) {
+            const rotation = -180 + (this.score / 100) * 180;
+            gauge.style.transform = `rotate(${rotation}deg)`;
+        }
+    },
+    
+    simulateAttack() {
+        if (Math.random() > 0.6) {
+            const type = this.attackTypes[Math.floor(Math.random() * this.attackTypes.length)];
+            const loc = this.locations[Math.floor(Math.random() * this.locations.length)];
+            const severity = Math.floor(Math.random() * 10) + 1;
+            
+            this.threats++;
+            if (severity <= 5) {
+                this.blocked++;
+                this.addIncident(`BLOCKED: ${type} from ${loc.name}`, 'SUCCESS');
+            } else {
+                this.addIncident(`DETECTED: ${type} from ${loc.name} (Severity: ${severity})`, 'WARN');
+            }
+            
+            this.activeAttacks.push({
+                x: loc.x + (Math.random() - 0.5) * 50,
+                y: loc.y + (Math.random() - 0.5) * 50,
+                type: type,
+                severity: severity,
+                life: 1.0
+            });
+        }
+    },
+    
+    addIncident(msg, type) {
+        const time = new Date().toLocaleTimeString('no-NO');
+        this.incidents.unshift({ time, msg, type });
+        if (this.incidents.length > 20) this.incidents.pop();
+        
+        const logs = document.getElementById('security-logs');
+        const colors = { SUCCESS: '#00ff88', WARN: '#ffb300', ERR: '#ff1a4a' };
+        logs.innerHTML = this.incidents.map(i => 
+            `<div style="padding:4px 0;border-bottom:1px solid rgba(13,58,86,0.3)">
+                <span style="color:#304a60">[${i.time}]</span> 
+                <span style="color:${colors[i.type]}">${i.msg}</span>
+            </div>`
+        ).join('');
+    },
+    
+    initThreatMap() {
+        const canvas = document.getElementById('threatMapCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        canvas.width = 460;
+        canvas.height = 280;
+        
+        const animate = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Grid
+            ctx.strokeStyle = 'rgba(0,229,255,0.03)';
+            ctx.lineWidth = 1;
+            for (let x = 0; x < canvas.width; x += 40) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+            }
+            for (let y = 0; y < canvas.height; y += 40) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+            }
+            
+            // Locations
+            this.locations.forEach(loc => {
+                ctx.beginPath();
+                ctx.arc(loc.x, loc.y, 8, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0,229,255,0.3)';
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(0,229,255,0.6)';
+                ctx.stroke();
+                
+                ctx.fillStyle = '#c8e8f0';
+                ctx.font = '8px JetBrains Mono';
+                ctx.textAlign = 'center';
+                ctx.fillText(loc.name, loc.x, loc.y + 20);
+            });
+            
+            // Active attacks
+            this.activeAttacks = this.activeAttacks.filter(attack => {
+                attack.life -= 0.02;
+                if (attack.life <= 0) return false;
+                
+                const color = attack.severity > 5 ? '#ff1a4a' : '#ffb300';
+                ctx.beginPath();
+                ctx.arc(attack.x, attack.y, 12 * attack.life, 0, Math.PI * 2);
+                ctx.fillStyle = color + Math.floor(attack.life * 255).toString(16).padStart(2, '0');
+                ctx.fill();
+                
+                // Ripple effect
+                ctx.beginPath();
+                ctx.arc(attack.x, attack.y, 20 * (1 - attack.life), 0, Math.PI * 2);
+                ctx.strokeStyle = color + '44';
+                ctx.stroke();
+                
+                return true;
+            });
+            
+            requestAnimationFrame(animate);
+        };
+        animate();
+    },
+    
+    initHeatmap() {
+        const heatmap = document.getElementById('security-heatmap');
+        if (!heatmap) return;
+        
+        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        const hours = 24;
+        
+        // Generate random activity data
+        const data = [];
+        for (let day = 0; day < 7; day++) {
+            for (let hour = 0; hour < hours; hour++) {
+                data.push({
+                    day,
+                    hour,
+                    activity: Math.random() * 100
+                });
+            }
+        }
+        
+        heatmap.innerHTML = data.map(cell => {
+            const intensity = Math.floor(cell.activity);
+            const color = intensity < 20 ? 'rgba(0,229,255,0.2)' :
+                         intensity < 40 ? 'rgba(0,229,255,0.4)' :
+                         intensity < 60 ? 'rgba(0,255,136,0.5)' :
+                         intensity < 80 ? 'rgba(255,179,0,0.6)' :
+                         'rgba(255,26,74,0.7)';
+            
+            return `<div class="heatmap-cell" style="background:${color}" title="${days[cell.day]} ${cell.hour}:00 - ${intensity.toFixed(0)}% activity"></div>`;
+        }).join('');
+    }
+};
+
+function updateSecurityLevel() {
+    const level = document.getElementById('sec-shield').value;
+    SecurityModule.score = 90 + level;
+    SecurityModule.updateMetrics();
+    sysLog(`Shield level set to ${level}`, 'INFO');
+}
+
+function logSecurityChange() {
+    const mode = document.getElementById('sec-ai').value;
+    sysLog(`AI Detection: ${mode.toUpperCase()}`, 'INFO');
+}
+
+// ════════════════════════════════════════════
+// WEATHER MODULE
+// ════════════════════════════════════════════
+const WeatherModule = {
+    data: {
+        temp: 12,
+        humidity: 65,
+        wind: 15,
+        uv: 3,
+        condition: 'Partly Cloudy',
+        icon: '🌤️'
+    },
+    forecast: [],
+    
+    init() {
+        this.generateForecast();
+        this.updateDisplay();
+        setInterval(() => this.simulateWeatherChange(), 5000);
+    },
+    
+    generateForecast() {
+        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        const icons = ['☀️', '🌤️', '☁️', '🌧️', '⛈️'];
+        this.forecast = days.map((day, i) => ({
+            day,
+            high: 10 + Math.random() * 15,
+            low: 5 + Math.random() * 8,
+            icon: icons[Math.floor(Math.random() * icons.length)]
+        }));
+    },
+    
+    simulateWeatherChange() {
+        this.data.temp += (Math.random() - 0.5) * 2;
+        this.data.humidity = Math.max(30, Math.min(95, this.data.humidity + (Math.random() - 0.5) * 10));
+        this.data.wind = Math.max(0, this.data.wind + (Math.random() - 0.5) * 5);
+        this.data.uv = Math.max(0, Math.min(11, this.data.uv + (Math.random() - 0.5)));
+        this.updateDisplay();
+    },
+    
+    updateDisplay() {
+        document.getElementById('weather-temp').textContent = this.data.temp.toFixed(1) + '°C';
+        document.getElementById('weather-humidity').textContent = this.data.humidity.toFixed(0) + '%';
+        document.getElementById('weather-wind').textContent = this.data.wind.toFixed(1) + ' km/h';
+        document.getElementById('weather-uv').textContent = this.data.uv.toFixed(1);
+        document.getElementById('weather-desc').textContent = this.data.condition;
+        document.getElementById('weather-icon').textContent = this.data.icon;
+    }
+};
+
+// ════════════════════════════════════════════
+// NEWS MODULE
+// ════════════════════════════════════════════
+const NewsModule = {
+    articles: [],
+    sources: ['TechCrunch', 'The Verge', 'Ars Technica', 'Wired', 'Hacker News'],
+    
+    init() {
+        this.generateArticles();
+        this.renderFeed();
+        setInterval(() => this.addNewArticle(), 15000);
+    },
+    
+    generateArticles() {
+        const headlines = [
+            'AI Breakthrough: New Model Achieves Human-Level Reasoning',
+            'Quantum Computing Milestone: 1000-Qubit Processor Unveiled',
+            'Cybersecurity Alert: Major Vulnerability Found in Popular Software',
+            'Tech Giants Report Record Earnings Amid AI Boom',
+            'New Programming Language Promises 10x Performance Boost',
+            'SpaceX Successfully Launches Starship V3',
+            'Apple Announces Revolutionary AR Glasses',
+            'OpenAI Releases GPT-5 with Multimodal Capabilities',
+            'Google Quantum AI Solves Decades-Old Math Problem',
+            'Microsoft Invests $10B in Nuclear-Powered Data Centers'
+        ];
+        
+        this.articles = headlines.map((headline, i) => ({
+            id: i,
+            headline,
+            source: this.sources[Math.floor(Math.random() * this.sources.length)],
+            time: Math.floor(Math.random() * 60) + 'm ago',
+            category: ['AI', 'Hardware', 'Security', 'Business', 'Space'][Math.floor(Math.random() * 5)]
+        }));
+        
+        document.getElementById('news-total').textContent = this.articles.length;
+        document.getElementById('news-updated').textContent = new Date().toLocaleTimeString('no-NO', {hour: '2-digit', minute: '2-digit'});
+    },
+    
+    addNewArticle() {
+        const newHeadlines = [
+            'Breaking: Major Tech Merger Announced',
+            'New Framework Revolutionizes Web Development',
+            'AI Startup Raises $500M in Series B',
+            'Cloud Computing Market Reaches New Heights'
+        ];
+        const article = {
+            id: Date.now(),
+            headline: newHeadlines[Math.floor(Math.random() * newHeadlines.length)],
+            source: this.sources[Math.floor(Math.random() * this.sources.length)],
+            time: '1m ago',
+            category: 'Breaking'
+        };
+        this.articles.unshift(article);
+        if (this.articles.length > 20) this.articles.pop();
+        this.renderFeed();
+        document.getElementById('news-total').textContent = this.articles.length;
+        document.getElementById('news-updated').textContent = new Date().toLocaleTimeString('no-NO', {hour: '2-digit', minute: '2-digit'});
+    },
+    
+    renderFeed() {
+        const feed = document.getElementById('news-feed');
+        const categoryColors = {
+            'AI': 'var(--accent)',
+            'Hardware': 'var(--orange)',
+            'Security': 'var(--red)',
+            'Business': 'var(--green)',
+            'Space': 'var(--purple)',
+            'Breaking': 'var(--red)'
+        };
+        
+        feed.innerHTML = this.articles.map(article => `
+            <div style="padding:15px;border-bottom:1px solid var(--border);transition:background 0.2s" class="news-item">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                    <span style="background:${categoryColors[article.category]}22;color:${categoryColors[article.category]};padding:3px 8px;border-radius:3px;font-size:0.65rem;font-weight:700;font-family:'JetBrains Mono',monospace">${article.category.toUpperCase()}</span>
+                    <span style="color:var(--muted);font-size:0.7rem;font-family:'JetBrains Mono',monospace">${article.time}</span>
+                </div>
+                <h3 style="font-size:0.95rem;font-weight:600;margin-bottom:6px;color:var(--text)">${article.headline}</h3>
+                <div style="color:var(--muted);font-size:0.75rem">Source: ${article.source}</div>
+            </div>
+        `).join('');
+    }
+};
+
+// ════════════════════════════════════════════
+// SYSTEM MONITOR MODULE
+// ════════════════════════════════════════════
+const SystemMonitor = {
+    metrics: {
+        cpu: [],
+        memory: [],
+        network: [],
+        disk: []
+    },
+    processes: [
+        { pid: 1234, name: 'chrome.exe', cpu: 12.5, memory: 512 },
+        { pid: 5678, name: 'node.exe', cpu: 8.3, memory: 256 },
+        { pid: 9012, name: 'code.exe', cpu: 5.2, memory: 384 },
+        { pid: 3456, name: 'system', cpu: 2.1, memory: 128 },
+        { pid: 7890, name: 'docker.exe', cpu: 15.8, memory: 1024 }
+    ],
+    uptime: 0,
+    
+    init() {
+        // Initialize with some data
+        for (let i = 0; i < 30; i++) {
+            this.metrics.cpu.push(30 + Math.random() * 40);
+            this.metrics.memory.push(50 + Math.random() * 30);
+            this.metrics.network.push(Math.random() * 100);
+            this.metrics.disk.push(Math.random() * 50);
+        }
+        
+        this.updateDisplay();
+        this.renderProcesses();
+        setInterval(() => this.updateMetrics(), 1000);
+        setInterval(() => this.updateUptime(), 1000);
+    },
+    
+    updateMetrics() {
+        const cpu = 30 + Math.random() * 40;
+        const memory = 50 + Math.random() * 30;
+        const network = Math.random() * 100;
+        const disk = Math.random() * 50;
+        
+        this.metrics.cpu.push(cpu);
+        this.metrics.memory.push(memory);
+        this.metrics.network.push(network);
+        this.metrics.disk.push(disk);
+        
+        if (this.metrics.cpu.length > 30) this.metrics.cpu.shift();
+        if (this.metrics.memory.length > 30) this.metrics.memory.shift();
+        if (this.metrics.network.length > 30) this.metrics.network.shift();
+        if (this.metrics.disk.length > 30) this.metrics.disk.shift();
+        
+        document.getElementById('sys-cpu').textContent = cpu.toFixed(1) + '%';
+        document.getElementById('sys-mem').textContent = memory.toFixed(1) + '%';
+        document.getElementById('sys-net').textContent = network.toFixed(1) + ' Mbps';
+        document.getElementById('sys-disk').textContent = disk.toFixed(1) + ' MB/s';
+        
+        // Update progress bars
+        document.getElementById('sys-cpu-bar').style.width = cpu + '%';
+        document.getElementById('sys-mem-bar').style.width = memory + '%';
+        document.getElementById('sys-net-bar').style.width = network + '%';
+        document.getElementById('sys-disk-bar').style.width = (disk * 2) + '%';
+        
+        // Add warning class if high
+        document.getElementById('sys-cpu-bar').classList.toggle('warning', cpu > 80);
+        document.getElementById('sys-mem-bar').classList.toggle('warning', memory > 85);
+        
+        // Update chart if exists
+        if (charts.sysPerformance) {
+            charts.sysPerformance.data.datasets[0].data = [...this.metrics.cpu];
+            charts.sysPerformance.data.datasets[1].data = [...this.metrics.memory];
+            charts.sysPerformance.data.datasets[2].data = [...this.metrics.network];
+            charts.sysPerformance.update('none');
+        }
+    },
+    
+    updateUptime() {
+        this.uptime++;
+        const hours = Math.floor(this.uptime / 3600);
+        const minutes = Math.floor((this.uptime % 3600) / 60);
+        const seconds = this.uptime % 60;
+        document.getElementById('sys-uptime').textContent = `${hours}h ${minutes}m ${seconds}s`;
+    },
+    
+    updateDisplay() {
+        document.getElementById('sys-os').textContent = 'Windows 11 Pro';
+        document.getElementById('sys-load').textContent = (1.5 + Math.random() * 2).toFixed(2);
+    },
+    
+    renderProcesses() {
+        const tbody = document.getElementById('sys-processes');
+        tbody.innerHTML = this.processes.map(p => `
+            <tr>
+                <td style="font-family:'JetBrains Mono',monospace;color:var(--accent)">${p.pid}</td>
+                <td>${p.name}</td>
+                <td style="font-family:'JetBrains Mono',monospace;color:${p.cpu > 10 ? 'var(--orange)' : 'var(--text)'}">${p.cpu.toFixed(1)}%</td>
+                <td style="font-family:'JetBrains Mono',monospace">${p.memory} MB</td>
+            </tr>
+        `).join('');
+    }
+};
  
 // ════════════════════════════════════════════
 // CHART GLOW PLUGIN
@@ -680,7 +1839,7 @@ function handleTerminalInput(e){
     if(!raw) return;
     sysLog(`CMD: ${raw}`,"INPUT");
     const cmd=raw.toLowerCase();
-    if(cmd==="/help")         sysLog("Kommandoer: /ping /clear /status /rank /kill [node]","INFO");
+    if(cmd==="/help")         sysLog("Kommandoer: /ping /clear /status /rank /kill [node] /export /predict /theme /notify [msg]","INFO");
     else if(cmd==="/ping")    sysLog(`Pong! ${Math.floor(Math.random()*12+4)}ms`,"SUCCESS");
     else if(cmd==="/clear")   document.getElementById('term-logs').innerHTML="";
     else if(cmd==="/status")  sysLog(`S&P500:${Indices.sp500.toFixed(2)} NASDAQ:${Indices.nasdaq.toFixed(2)}`,"INFO");
@@ -691,6 +1850,17 @@ function handleTerminalInput(e){
         const n=raw.slice(6).trim();
         const c=n.charAt(0).toUpperCase()+n.slice(1).toLowerCase();
         if(Topology.nodes[c]) toggleNodeKill(c); else sysLog(`Ukjent node: ${n}`,"ERR");
+    } else if(cmd==="/export") {
+        DataExport.exportMarketData();
+        sysLog("Market data exported","SUCCESS");
+    } else if(cmd==="/predict") {
+        runPrediction();
+    } else if(cmd==="/theme") {
+        toggleTheme();
+    } else if(cmd.startsWith("/notify ")) {
+        const msg = raw.slice(8);
+        NotificationSystem.info(msg);
+        sysLog(`Notification sent: ${msg}`,"SUCCESS");
     } else sysLog(`Ukjent: "${raw}" — /help`,"ERR");
 }
  
@@ -855,10 +2025,16 @@ function init3DGlobe(){
         new THREE.MeshBasicMaterial({color:0x0a1e35,wireframe:true,transparent:true,opacity:0.55})));
  
     const spots=[
-        {lat:40.71,lon:-74.01,i:1.5,n:false},{lat:34.05,lon:-118.24,i:1.2,n:false},
-        {lat:51.51,lon:-0.13, i:1.6,n:false},{lat:59.91,lon:10.75,  i:0.9,n:true},
-        {lat:35.68,lon:139.65,i:1.8,n:false},{lat:31.23,lon:121.47, i:1.4,n:false},
-        {lat:1.35, lon:103.82,i:1.1,n:false}
+        {lat:40.71,lon:-74.01,i:1.5,n:false,label:'New York'},
+        {lat:34.05,lon:-118.24,i:1.2,n:false,label:'Los Angeles'},
+        {lat:51.51,lon:-0.13, i:1.6,n:false,label:'London'},
+        {lat:59.91,lon:10.75,  i:0.9,n:true,label:'Oslo'},
+        {lat:35.68,lon:139.65,i:1.8,n:false,label:'Tokyo'},
+        {lat:31.23,lon:121.47, i:1.4,n:false,label:'Shanghai'},
+        {lat:1.35, lon:103.82,i:1.1,n:false,label:'Singapore'},
+        {lat:-33.87,lon:151.21,i:1.3,n:false,label:'Sydney'},
+        {lat:55.76,lon:37.62, i:1.0,n:false,label:'Moscow'},
+        {lat:52.52,lon:13.40, i:1.1,n:false,label:'Berlin'}
     ];
     spots.forEach(s=>{
         const pos=latLon3D(s.lat,s.lon,6);
@@ -866,7 +2042,28 @@ function init3DGlobe(){
         const g=new THREE.BoxGeometry(0.2,0.2,h); g.translate(0,0,h/2);
         const m=new THREE.Mesh(g,new THREE.MeshBasicMaterial({color:s.n?0x00ff88:0x00e5ff,transparent:true,opacity:0.9}));
         m.position.copy(pos); m.lookAt(new THREE.Vector3(0,0,0));
-        m.userData={base:0.9,speed:1.5+Math.random()*3}; globeGroup.add(m);
+        m.userData={base:0.9,speed:1.5+Math.random()*3,label:s.label,coords:`${s.lat.toFixed(2)}°, ${s.lon.toFixed(2)}°`}; globeGroup.add(m);
+    });
+
+    // Raycaster for click detection
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    
+    c.addEventListener('click', (e) => {
+        const rect = c.getBoundingClientRect();
+        mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        
+        raycaster.setFromCamera(mouse, globeCamera);
+        const intersects = raycaster.intersectObjects(globeGroup.children);
+        
+        if (intersects.length > 0) {
+            const obj = intersects[0].object;
+            if (obj.userData && obj.userData.label) {
+                NotificationSystem.info(`${obj.userData.label} - ${obj.userData.coords}`);
+                sysLog(`Location selected: ${obj.userData.label}`, 'INFO');
+            }
+        }
     });
  
     c.addEventListener('mousedown',()=>isDragging=true);
@@ -926,8 +2123,86 @@ function selectAsset(id){
         charts.assetFocus.data.datasets[0].pointBackgroundColor=col;
         charts.assetFocus.update();
     }
+    // Hide prediction panel when switching assets
+    document.getElementById('prediction-info').style.display='none';
+}
+
+function runPrediction() {
+    const asset = MarketTerminal.assets.find(a => a.id === currentSelectedAsset);
+    if (!asset) return;
+    
+    const analysis = PredictiveAnalytics.analyzeAsset(asset);
+    const panel = document.getElementById('prediction-info');
+    const content = document.getElementById('prediction-content');
+    
+    const trendColors = {
+        'BULLISH': 'var(--green)',
+        'BEARISH': 'var(--red)',
+        'NEUTRAL': 'var(--orange)'
+    };
+    
+    content.innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+            <div><strong>Trend:</strong> <span style="color:${trendColors[analysis.trend]}">${analysis.trend}</span></div>
+            <div><strong>Confidence:</strong> ${analysis.confidence.toFixed(1)}%</div>
+            <div><strong>Current:</strong> $${analysis.currentPrice.toLocaleString()}</div>
+            <div><strong>Predicted:</strong> $${analysis.targetPrice.toFixed(2)}</div>
+            <div><strong>Change:</strong> ${analysis.percentChange.toFixed(2)}%</div>
+            <div><strong>Signal:</strong> <span style="color:${analysis.recommendation.includes('BUY')?'var(--green)':analysis.recommendation==='SELL'?'var(--red)':'var(--orange)'}">${analysis.recommendation}</span></div>
+        </div>
+    `;
+    
+    panel.style.display = 'block';
+    NotificationSystem.success(`Prediction generated for ${asset.id}`);
+    sysLog(`AI Prediction: ${asset.id} - ${analysis.recommendation}`, 'INFO');
+}
+
+function filterMarket() {
+    const search = document.getElementById('market-search').value.toLowerCase();
+    const filter = document.getElementById('market-filter').value;
+    
+    MarketTerminal.assets.forEach(asset => {
+        const row = document.getElementById(`mkt-${asset.id}`);
+        if (!row) return;
+        
+        const matchesSearch = asset.name.toLowerCase().includes(search) || asset.id.toLowerCase().includes(search);
+        const matchesFilter = filter === 'all' || asset.type === filter;
+        
+        row.style.display = matchesSearch && matchesFilter ? '' : 'none';
+    });
+}
+
+function filterNews() {
+    const search = document.getElementById('news-search').value.toLowerCase();
+    const articles = document.querySelectorAll('.news-item');
+    
+    articles.forEach(article => {
+        const text = article.textContent.toLowerCase();
+        article.style.display = text.includes(search) ? '' : 'none';
+    });
 }
  
+// ════════════════════════════════════════════
+// KEYBOARD SHORTCUTS
+// ════════════════════════════════════════════
+const tabIds = ['ai-tab', 'finans-tab', 'security-tab', 'weather-tab', 'news-tab', 'system-tab', 'norge-tab'];
+const tabButtons = document.querySelectorAll('.tab-btn');
+
+document.addEventListener('keydown', (e) => {
+    // Number keys 1-7 for tab switching
+    if (e.key >= '1' && e.key <= '7' && !e.ctrlKey && !e.altKey) {
+        const index = parseInt(e.key) - 1;
+        if (index < tabButtons.length) {
+            tabButtons[index].click();
+        }
+    }
+    // Ctrl + ` for terminal focus
+    if (e.ctrlKey && e.key === '`') {
+        e.preventDefault();
+        document.getElementById('term-input').focus();
+    }
+});
+
 // ════════════════════════════════════════════
 // TAB
 // ════════════════════════════════════════════
@@ -1102,6 +2377,106 @@ function initAllCharts(){
     });
  
     selectAsset(currentSelectedAsset);
+
+    // Security charts
+    charts.secAttack = new Chart(document.getElementById('secAttackChart').getContext('2d'),{
+        type:'doughnut',
+        plugins:[makeGlowPlugin('rgba(255,26,74,0.4)',20)],
+        data:{
+            labels:SecurityModule.attackTypes,
+            datasets:[{
+                data:[25,20,18,15,12,10],
+                backgroundColor:['rgba(255,26,74,0.7)','rgba(255,179,0,0.7)','rgba(176,96,255,0.7)','rgba(0,229,255,0.7)','rgba(0,255,136,0.7)','rgba(120,153,170,0.7)'],
+                borderColor:['#ff1a4a','#ffb300','#b060ff','#00e5ff','#00ff88','#789aaa'],
+                borderWidth:1
+            }]
+        },
+        options:{responsive:true,maintainAspectRatio:false,cutout:'65%',
+            plugins:{legend:{position:'right',labels:{color:'#304a60',font:{size:8,family:"'JetBrains Mono'"},boxWidth:8,padding:8}}}}
+    });
+
+    charts.secTimeline = new Chart(document.getElementById('secTimelineChart').getContext('2d'),{
+        type:'line',
+        plugins:[makeGlowPlugin('rgba(255,26,74,0.5)',18)],
+        data:{
+            labels:['00:00','04:00','08:00','12:00','16:00','20:00','24:00'],
+            datasets:[{
+                data:[5,12,8,25,18,30,15],
+                borderColor:'#ff1a4a',
+                backgroundColor:'rgba(255,26,74,0.1)',
+                borderWidth:2,
+                tension:0.4,
+                fill:true,
+                pointRadius:3
+            }]
+        },
+        options:baseOpts
+    });
+
+    // Weather forecast chart
+    charts.weatherForecast = new Chart(document.getElementById('weatherForecastChart').getContext('2d'),{
+        type:'line',
+        plugins:[makeGlowPlugin('rgba(0,229,255,0.5)',18)],
+        data:{
+            labels:WeatherModule.forecast.map(f => f.day),
+            datasets:[{
+                label:'High',
+                data:WeatherModule.forecast.map(f => f.high),
+                borderColor:'#ff1a4a',
+                backgroundColor:'rgba(255,26,74,0.1)',
+                borderWidth:2,
+                tension:0.4,
+                fill:false
+            },{
+                label:'Low',
+                data:WeatherModule.forecast.map(f => f.low),
+                borderColor:'#00e5ff',
+                backgroundColor:'rgba(0,229,255,0.1)',
+                borderWidth:2,
+                tension:0.4,
+                fill:true
+            }]
+        },
+        options:{...baseOpts,plugins:{legend:{display:true,labels:{color:'#304a60',font:{size:9}}}}}
+    });
+
+    // System performance chart
+    charts.sysPerformance = new Chart(document.getElementById('sysPerformanceChart').getContext('2d'),{
+        type:'line',
+        plugins:[makeGlowPlugin('rgba(0,229,255,0.5)',18)],
+        data:{
+            labels:Array(30).fill('').map((_,i) => i),
+            datasets:[{
+                label:'CPU',
+                data:SystemMonitor.metrics.cpu,
+                borderColor:'#00e5ff',
+                backgroundColor:'rgba(0,229,255,0.1)',
+                borderWidth:2,
+                tension:0.4,
+                fill:false,
+                pointRadius:0
+            },{
+                label:'Memory',
+                data:SystemMonitor.metrics.memory,
+                borderColor:'#00ff88',
+                backgroundColor:'rgba(0,255,136,0.1)',
+                borderWidth:2,
+                tension:0.4,
+                fill:false,
+                pointRadius:0
+            },{
+                label:'Network',
+                data:SystemMonitor.metrics.network,
+                borderColor:'#ffb300',
+                backgroundColor:'rgba(255,179,0,0.1)',
+                borderWidth:2,
+                tension:0.4,
+                fill:false,
+                pointRadius:0
+            }]
+        },
+        options:{...baseOpts,plugins:{legend:{display:true,labels:{color:'#304a60',font:{size:9}}}},scales:{x:{display:false}}}
+    });
 }
  
 // ════════════════════════════════════════════
@@ -1135,6 +2510,19 @@ initTopologyCanvas();
 init3DGlobe();
 runMacroSimulation();
 startIntervals();
+
+// Initialize new modules
+SecurityModule.init();
+WeatherModule.init();
+NewsModule.init();
+SystemMonitor.init();
+APIModule.init();
+NotificationSystem.init();
+ThemeManager.init();
+UserPreferences.init();
+
+sysLog("All modules initialized successfully","SUCCESS");
+NotificationSystem.success("Quantum Telemetry Core v2.0 Online");
 </script>
 </body>
 </html>
