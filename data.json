@@ -1,0 +1,32 @@
+[
+  {
+    "rangering": 1,
+    "navn": "ChatGPT",
+    "kategori": "Generell AI",
+    "aktive_brukere": 245000
+  },
+  {
+    "rangering": 2,
+    "navn": "Google Gemini",
+    "kategori": "Søk & Multimodal",
+    "aktive_brukere": 89000
+  },
+  {
+    "rangering": 3,
+    "navn": "Canva AI",
+    "kategori": "Design & Visuell",
+    "aktive_brukere": 42000
+  },
+  {
+    "rangering": 4,
+    "navn": "Claude (Anthropic)",
+    "kategori": "Tekst & Koding",
+    "aktive_brukere": 38000
+  },
+  {
+    "rangering": 5,
+    "navn": "DeepSeek",
+    "kategori": "Søk & Resonnering",
+    "aktive_brukere": 31000
+  }
+]
